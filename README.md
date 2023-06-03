@@ -165,7 +165,7 @@ VM（Vue实例对象）身上的属性以及Vue原型上的所有属性都可以
 
 <img src="https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230603204422418.png" alt="image-20230603204422418" style="zoom:67%;" />
 
-<img src="C:\Front_Leran\Vue_Learn\assets\image-20230603204604571.png" alt="image-20230603204604571" style="zoom: 67%;" />
+<img src="https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230603204604571.png" alt="image-20230603204604571" style="zoom: 67%;" />
 
 ```javascript
 <div id="root">
