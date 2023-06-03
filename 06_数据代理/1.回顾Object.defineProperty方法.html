@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/Javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      let sex = "女";
+      let person = {
+        name: "张三",
+        age: 18,
+      };
+      // 通过Object.defineProperty方法来实现数据代理
+      //1.对象 (obj)要定义或修改属性的对象。
+      //2.属性名称 (prop)要定义或修改的属性名称。
+      //3.属性描述符 (descriptor)一个包含属性特性的对象。
+
+      //为Person对象添加一个sex属性
+      Object.defineProperty(person, "sex", {
+        // value: "男",
+        // enumerable: true, //是否可枚举
+        // writable: true, //是否可修改
+        get: function () {
+          //当有人读取person的sex属性时，会自动调用get方法
+          console.log("get方法被调用了");
+          return sex;
+        },
+        set: function (value) {
+          //当有人修改person的sex属性时，会自动调用get方法
+          console.log("set方法被调用了");
+          sex = value;
+        },
+      });
+      console.log(person);
+      //添加的属性是不可枚举的
+      console.log(Object.keys(person)); //["name", "age"]
+    </script>
+  </body>
+</html>
