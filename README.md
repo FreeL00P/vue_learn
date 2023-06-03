@@ -339,6 +339,6 @@ set(value) {
 
 ![image-20230603220339044](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230603220339044.png)
 
->![image-20230603220800396](C:\Front_Leran\Vue_Learn\assets\image-20230603220800396.png)
+>![image-20230603220800396](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230603220800396.png)
 >
 >_data对采用事件劫持对data进行了封装
