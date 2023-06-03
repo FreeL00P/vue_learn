@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/Javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      <!-- 调用js函数 -->
+      <h1>Hello {{msg.toUpperCase()}}</h1>
+      <h1>{{list}}</h1>
+    </div>
+    <!-- <div id="root">
+      <h1>Hello {{msg}}</h1>
+      <h1>{{list}}</h1>
+    </div> -->
+    <script type="text/Javascript">
+        //vue实例和容器是一对一的关系
+        //一个vue实例只能控制一个区域
+        //一个区域只能被一个vue实例控制
+        //阻止启动生产消息
+      Vue.config.productionTip=false;
+        //创建vue实例
+        //容器里的代码被称为模板
+        const x=new Vue({
+            el:'#root',//el用于指定当前vue实例控制的页面区域，值通常是css选择器
+            data:{
+                //data中存放的是当前vue实例需要的一些数据
+                msg:'hello world',
+                list:[1,2,3322,1,5],
+            }
+        });
+        // const y=new Vue({
+        //     el:'#root',//el用于指定当前vue实例控制的页面区域，值通常是css选择器
+        //     data:{
+        //         //data中存放的是当前vue实例需要的一些数据
+        //         msg:'hello world',
+        //         list:[1,2,3,4,5],
+        //     }
+        // });
+    </script>
+  </body>
+</html>

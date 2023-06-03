@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/Javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      <h1>插值语法 一般动态绑定标签体内容</h1>
+      <h3>你好 {{name}}</h3>
+      <hr />
+      <h1>指令语法 一般动态绑定标签属性内容</h1>
+      <!-- v-bind 把url当做js表达式来执行 可以简写为 v-bind ==> : -->
+      <!-- v-bind 可以给标签里的任何一个属性动态绑定值 -->
+      <a :href="url">主页</a>
+    </div>
+    <script type="text/Javascript">
+      Vue.config.productionTip=false;
+      new Vue({
+          el:'#root',
+          data:{
+              name:'freel00p',
+              url:"https://freel00p.top"
+          }
+      });
+    </script>
+  </body>
+</html>
