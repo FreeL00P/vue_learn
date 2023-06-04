@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/Javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      <h2>新天地，有了新{{name}}</h2>
+      <h2>新{{name}}，就是新天地</h2>
+      <!-- 点击后寻找名为changeName的函数进行调用 -->
+      <button v-on:click="changeNameByValue($event,66)">改名byValue</button>
+      <!-- 可以简写为@click -->
+      <button @click="changeName">改名</button>
+    </div>
+    <script>
+      //   function changeName() {
+      //     alert("改名成功");
+      //   }
+      //关闭vue启动时的提示信息
+      Vue.config.productionTip = false;
+      new Vue({
+        el: "#root",
+        data: {
+          name: "满洲",
+        },
+        //配置事件处理函数 e是事件对象
+        methods: {
+          changeName: function (e) {
+            //this指向当前vue实例
+            this.name = "馒头";
+            console.log(this);
+          },
+          changeNameByValue: (e, a) => {
+            //this指向window
+            this.name = a;
+            console.log(this);
+            console.log(e);
+            console.log(a);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

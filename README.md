@@ -342,3 +342,147 @@ set(value) {
 >![image-20230603220800396](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230603220800396.png)
 >
 >_data对采用事件劫持对data进行了封装
+
+## 1.7 事件处理
+
+点击事件
+
+```javascript
+<div id="root">
+      <h2>新天地，有了新{{name}}</h2>
+      <h2>新{{name}}，就是新天地</h2>
+      <!-- 点击后寻找名为changeName的函数进行调用 -->
+      <button v-on:click="changeName">改名</button>
+      <!-- 可以简写为@click -->
+      <button @click="changeName">改名</button>
+</div>
+```
+
+如果我们像使用js一样，直接创建一个函数
+
+```javascript
+function changeName() {
+	alert("改名成功");
+}
+```
+
+我们可以看到是无法调用成功的
+
+![image-20230604190849991](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230604190849991.png)
+
+因为Vue的模板只能访问Vue实例所提供
+
+![image-20230604191059917](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230604191059917.png)
+
+在Vue实例中添加事件处理函数
+
+```javascript
+new Vue({
+    el: "#root",
+    data: {
+      name: "满洲",
+    },
+    //配置事件处理函数 e是事件对象
+    methods: {
+      changeName: function (e) {
+        //this指向当前vue实例
+        this.name = "馒头";
+      },
+    },
+});
+```
+
+使用
+
+![image-20230604192244200](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230604192244200.png)
+
+**事件处理函数中的this指向当前Vue实例**
+
+![image-20230604192441398](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230604192441398.png)
+
+>  **如果使用箭头函数，那么this就我去父级寻找，在这里是windows**
+
+```
+changeNameByValue: (e) => {
+    //this指向window
+    this.name = "馒头";
+    console.log(this);
+},
+```
+
+回调函数如何传递参数‘
+
+```
+ <button v-on:click="changeNameByValue(66)">改名</button>
+changeNameByValue: (e) => {
+    //this指向window
+    this.name = "馒头";
+    console.log(this);
+    console.log(e);
+},
+```
+
+直接在括号里面填入自己的参数，但上面的列子会丢失event事件对象
+
+![image-20230604193207169](C:\Front_Leran\Vue_Learn\assets\image-20230604193207169.png)
+
+可以看到e接受了传过来的参数，事件对象不见了
+
+在参数列表中加入$event Vue会自动扫描当前事件对象，将他传递进来
+
+```javascript
+ <button v-on:click="changeNameByValue($event,66)">改名byValue</button>
+```
+
+
+
+![image-20230604193513944](C:\Front_Leran\Vue_Learn\assets\image-20230604193513944.png)
+
+代码
+
+```javascript
+<div id="root">
+  <h2>新天地，有了新{{name}}</h2>
+  <h2>新{{name}}，就是新天地</h2>
+  <!-- 点击后寻找名为changeName的函数进行调用 -->
+  <button v-on:click="changeNameByValue($event,66)">改名byValue</button>
+  <!-- 可以简写为@click -->
+  <button @click="changeName">改名</button>
+</div>
+<script>
+  //   function changeName() {
+  //     alert("改名成功");
+  //   }
+  //关闭vue启动时的提示信息
+  Vue.config.productionTip = false;
+  new Vue({
+    el: "#root",
+    data: {
+      name: "满洲",
+    },
+    //配置事件处理函数 e是事件对象
+    methods: {
+      changeName: function (e) {
+        //this指向当前vue实例
+        this.name = "馒头";
+        console.log(this);
+      },
+      changeNameByValue: (e, a) => {
+        //this指向window
+        this.name = a;
+        console.log(this);
+        console.log(e);
+        console.log(a);
+      },
+    },
+  });
+</script>
+```
+
+事件的基本使用总结：
+
+- 使用v-on:xxx或@xxx绑定事件，其中xxx是事件名;
+- 事件的回调需要配置在methods对象中，最终会在vm上;
+- methods中配置的函数，不要箭头函数！否则this就不是vm了；
+- methods中配置的函数，都是被Vue所管理的函数，this的指向是vm或组件实例对象
+- @click="demo" 和@click="demo($event)"效果一样，但后者可以传递参数

@@ -11,6 +11,9 @@
     <div id="root">
       <h2>学校名称{{name}}</h2>
       <h2>学校地址{{address}}</h2>
+      <span>{{sum}}</span>
+      <span>{{doubleSum}}</span>
+      <button onclick="addClick">sum++</button>
     </div>
     <script>
       const v = new Vue({
@@ -18,6 +21,21 @@
         data: {
           name: "湖南工程学院",
           address: "湘潭",
+          sum: 0,
+        },
+        methods: {
+          addClick() {
+            this.sum++;
+          },
+        },
+        computed: {
+          //计算属性
+          total() {
+            return this.name + this.address;
+          },
+          doubleSum() {
+            return this.sum * 2;
+          },
         },
       });
       console.log(v);
