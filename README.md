@@ -345,6 +345,8 @@ set(value) {
 
 ## 1.7 事件处理
 
+### 1.7.1 事件的基本使用
+
 点击事件
 
 ```javascript
@@ -487,7 +489,7 @@ changeNameByValue: (e) => {
 - methods中配置的函数，都是被Vue所管理的函数，this的指向是vm或组件实例对象
 - @click="demo" 和@click="demo($event)"效果一样，但后者可以传递参数
 
-## 事件修饰符
+### 1.7.2 事件修饰符
 
 使用事件修饰符阻止默认事件
 
@@ -568,4 +570,39 @@ showMsg: function (e, num) {
 **passive 事件的默认行为立即执行，无需等待事件回调执行完毕**
 
 例如鼠标滚动一下循环一千次，加上passive后就无需等待循环结束，直接滚动页面
+
+### 1.7.3 键盘事件
+
+键盘事件语法糖：@keydown，@keyup
+
+Vue中常用的按键别名：
+
+- 回车 => enter
+- 删除 => delete
+- 退出 => esc
+- 空格 => space
+- 换行 => tab (特殊，必须配合keydown去使用)
+
+```javascript
+<div id="root">
+  <input
+    type="text"
+    placeholder="按下回车键输入"
+    @keyup.enter="showInfo"
+  />
+</div>
+<script>
+  new Vue({
+    el: "#root",
+    methods: {
+      showInfo: function (e) {
+        // if (e.keyCode == 13) {
+        //   alert(e.target.value);
+        // }
+        console.log(e.target.value);
+      },
+    },
+  });
+</script>
+```
 
