@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/Javascript" src="../js/vue.js"></script>
+    <style>
+      .box1 {
+        width: 200px;
+        height: 200px;
+        background-color: pink;
+      }
+      .box2 {
+        width: 100px;
+        height: 100px;
+        background-color: skyblue;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <h2>欢迎来到{{name}}学习</h2>
+      <!-- 阻止默认行为 -->
+      <a href="https://freel00p.top" @click.prevent="showInfo">
+        点我提示信息
+      </a>
+      <!-- 阻止事件冒泡 -->
+      <div class="demo1" @click="showInfo">
+        <button @click.stop="showInfo">阻止事件冒泡</button>
+      </div>
+      <!-- 事件只触发一次 -->
+      <button @click.once="showInfo">事件只触发一次</button>
+      <!-- 使用事件的捕获模式 -->
+      <!-- <div class="box1" @click.capture="showMsg(1)">
+        div1
+        <div class="box2" @click="showMsg(2)">div2</div>
+      </div>
+      <br /> -->
+      <!-- self 只有event.target是当前操作的元素才触发事件 -->
+      <div class="box1" @click.self="showMsg($event,1)">
+        div1
+        <div class="box2" @click="showMsg($event,2)">div2</div>
+      </div>
+    </div>
+    <script>
+      new Vue({
+        el: "#root",
+        data: {
+          name: "freel00p",
+        },
+        methods: {
+          showInfo: function (e) {
+            //阻止默认行为
+            //e.preventDefault();
+            alert("欢迎来到freel00p的学习网站");
+          },
+          showMsg: function (e, num) {
+            console.log(e.target);
+            console.log("div" + num);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

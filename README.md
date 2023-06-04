@@ -424,7 +424,7 @@ changeNameByValue: (e) => {
 
 直接在括号里面填入自己的参数，但上面的列子会丢失event事件对象
 
-![image-20230604193207169](C:\Front_Leran\Vue_Learn\assets\image-20230604193207169.png)
+![image-20230604193207169](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230604193207169.png)
 
 可以看到e接受了传过来的参数，事件对象不见了
 
@@ -436,7 +436,7 @@ changeNameByValue: (e) => {
 
 
 
-![image-20230604193513944](C:\Front_Leran\Vue_Learn\assets\image-20230604193513944.png)
+![image-20230604193513944](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230604193513944.png)
 
 代码
 
@@ -486,3 +486,86 @@ changeNameByValue: (e) => {
 - methods中配置的函数，不要箭头函数！否则this就不是vm了；
 - methods中配置的函数，都是被Vue所管理的函数，this的指向是vm或组件实例对象
 - @click="demo" 和@click="demo($event)"效果一样，但后者可以传递参数
+
+## 事件修饰符
+
+使用事件修饰符阻止默认事件
+
+```javascript
+e.preventDefault();
+```
+
+vue使用prevent阻止默认事件，直接在事件名后面加上.prevent
+
+```javascript
+<a href="https://freel00p.top" @click.prevent="showInfo">点我提示信息</a>
+```
+
+![image-20230604200712956](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230604200712956.png)
+
+点确认后不会跳转到页面，阻止成功
+
+Vue的一些事件修饰符
+
+1. prevent 阻止默认事件
+2. stop 阻止事件冒泡
+3. once 事件只触发一次
+4. capture 使用事件的捕获模式
+5. self 只有event.target是当前操作的元素才触发事件
+6. passive 事件的默认行为立即执行，无需等待事件回调执行完毕
+
+**事件的捕获模式**
+
+```javascript
+<!-- 使用事件的捕获模式 -->
+<div class="box1" @click="showMsg(1)">
+    div1
+    <div class="box2" @click="showMsg(2)">div2</div>
+</div>
+showMsg: function (num) {
+    console.log("div" + num);
+},
+```
+
+点击box2，控制台输出
+
+![image-20230604202402626](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230604202402626.png)
+
+在事件捕获阶段，从外向内 div1->div2
+在事件冒泡阶段，从内向外div2->div1
+
+在box1 的事件上添加事件修饰符capture 使用事件的捕获模式
+点击box2，控制台输出
+
+![image-20230604202706044](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230604202706044.png)
+
+**使用self 只有event.target是当前操作的元素才触发事件**
+在div1上加上事件修饰符self
+
+```javascript
+<div class="box1" @click.self="showMsg($event,1)">
+    div1
+    <div class="box2" @click="showMsg($event,2)">div2</div>
+</div>
+showMsg: function (e, num) {
+    console.log(e.target);
+    console.log("div" + num);
+},
+```
+
+控制台输出
+
+![image-20230604203257574](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230604203257574.png)
+
+控制台只打印了div2，因为事件冒泡阶段的event都是div2，在div1上的event是div1时才会执行
+
+> 使用self修饰符也能阻止事件冒泡
+
+点击div1,控制台打印
+
+![image-20230604203545171](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230604203545171.png)
+
+**passive 事件的默认行为立即执行，无需等待事件回调执行完毕**
+
+例如鼠标滚动一下循环一千次，加上passive后就无需等待循环结束，直接滚动页面
+
