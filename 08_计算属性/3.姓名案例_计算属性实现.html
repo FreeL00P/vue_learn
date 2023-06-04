@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script type="text/Javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      姓：<input type="text" v-model="firstName" /><br />
+      名：<input type="text" v-model="lastName" /> <br />
+      姓名：<span>{{fullName}}</span> 姓名：<span>{{fullName}}</span>
+      姓名：<span>{{fullName}}</span> 姓名：<span>{{fullName}}</span>
+    </div>
+    <script>
+      new Vue({
+        el: "#root",
+        data: {
+          firstName: "张",
+          lastName: "三",
+        },
+        computed: {
+          fullName: {
+            //当有人读取fullName时，get就会被调用，且返回值就作为fullName的值
+            //什么时候调用？1.初次读取fullName时。2.所依赖的数据发生变化时。
+            get() {
+              console.log("get被调用了");
+              return this.firstName + "-" + this.lastName;
+            },
+            //set什么时候调用? 当fullName被修改时。
+            // 可以主动在控制台修改fullName来查看情况
+            set(value) {
+              console.log("set", value);
+              const arr = value.split("-");
+              this.firstName = arr[0];
+              this.lastName = arr[1];
+            },
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

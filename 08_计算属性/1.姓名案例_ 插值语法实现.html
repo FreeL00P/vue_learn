@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/Javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      姓：<input type="text" v-model="firstName" /><br />
+      名：<input type="text" v-model="lastName" /> <br />
+      <!-- 如果firstName需要处理比如转大写 反转，标签内的语法将会变得十分复杂 -->
+      姓名：<span>{{firstName}}-{{lastName}}</span>
+    </div>
+    <script>
+      new Vue({
+        el: "#root",
+        data: {
+          firstName: "张",
+          lastName: "三",
+        },
+      });
+    </script>
+  </body>
+</html>
