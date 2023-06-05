@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/Javascript" src="../js/vue.js"></script>
+    <style>
+      .basic {
+        height: 400px;
+        width: 400px;
+        background-color: antiquewhite;
+      }
+      .happy {
+        color: tomato;
+      }
+      .unhappy {
+        color: blue;
+      }
+      .freel00p1 {
+        background-color: aliceblue;
+      }
+      .freel00p2 {
+        background-color: aqua;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <!-- 绑定class样式--字符串写法 适用于：样式的类名不确定，需要动态指定 -->
+      <div class="basic" :class="mood" @click="changeMood">{{name}}</div>
+      <!-- 绑定class样式--数组写法，适用于：要绑定的样式个数不确定，名字也不确定 -->
+      <div class="basic" :class="classArr" @click="changeMood">{{name}}</div>
+      <!-- 绑定class样式--对象写法，适用于：要绑定的样式个数确定，名字确定，但需要动态指定用不用 -->
+      <div class="basic" :class="mood" @click="changeMood">{{name}}</div>
+    </div>
+    <script>
+      new Vue({
+        el: "#root",
+        data: {
+          name: "小明",
+          mood: "unhappy",
+          classArr: ["freel00p1", "freel00p2"],
+          classObj: {
+            freel00p1: true,
+            freel00p2: false,
+          },
+        },
+        methods: {
+          changeMood() {
+            this.mood = "happy";
+            // this.classObj.freel00p1=false;
+            // this.classArr.push("freel00p1");
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
