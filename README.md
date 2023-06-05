@@ -606,3 +606,159 @@ Vue中常用的按键别名：
 </script>
 ```
 
+## 1.8计算属性
+
+- 定义：需要使用的属性，需要用现有属性"计算"得到
+- 优势：与method相比，计算属性用缓存机制，避免多次调用，效率高
+- get函数调用时期
+  - 1.初次读取fullName时。2.所依赖的数据发生变化时。      
+- Tips
+  - 计算属性最终会出现在vm上，直接读取使用即可
+  - 如果计算属性要被修改，那必须写set函数去响应修改，且set中要引起计算时依赖的数据发生改变
+
+```javascript
+ <div id="root">
+  姓：<input type="text" v-model="firstName" /><br />
+  名：<input type="text" v-model="lastName" /> <br />
+  姓名：<span>{{fullName}}</span> 姓名：<span>{{fullName}}</span>
+  姓名：<span>{{fullName}}</span> 姓名：<span>{{fullName}}</span>
+</div>
+<script>
+  new Vue({
+    el: "#root",
+    data: {
+      firstName: "张",
+      lastName: "三",
+    },
+    computed: {
+      fullName: {
+        //当有人读取fullName时，get就会被调用，且返回值就作为fullName的值
+        //什么时候调用？1.初次读取fullName时。2.所依赖的数据发生变化时。
+        get() {
+          console.log("get被调用了");
+          return this.firstName + "-" + this.lastName;
+        },
+        //当计算属性的结果不需要修改时，可以使用简写方法
+   		//funName:function(){
+        //	 return this.firstName + "-" + this.lastName; 
+      	//}
+        //set什么时候调用? 当fullName被修改时。
+        // 可以主动在控制台修改fullName来查看情况
+        set(value) {
+          console.log("set", value);
+          const arr = value.split("-");
+          this.firstName = arr[0];
+          this.lastName = arr[1];
+        },
+      },
+    },
+  });
+</script>
+```
+
+ ## 1.9 事件监听
+
+ 监视属性watch：
+
+1. 当被监视的属性发生改变时，会自动调用handler函数
+
+2. 监视的属性必须存在
+
+3. 当监视的属性发生改变时，会传递两个参数
+
+   ​       1.newValue:改变后的值
+
+   ​       2.oldValue:改变前的值
+
+4. .监视的两种写法
+
+   1.  new Vue({watch:{isHot(){}}})
+   2. vm.$watch("isHot",function(){})
+
+```javascript
+ const vm = new Vue({
+        el: "#root",
+        data: {
+          isHot: true,
+        },
+        computed: {
+          info() {
+            return this.isHot ? "热" : "不热";
+          },
+        },
+        methods: {
+          changeWeather() {
+            this.isHot = !this.isHot;
+          },
+        },
+        /*
+          监视属性watch：
+            1.当被监视的属性发生改变时，会自动调用handler函数
+            2.监视的属性必须存在
+            3.当监视的属性发生改变时，会传递两个参数
+              1.newValue:改变后的值
+              2.oldValue:改变前的值
+            4.监视的两种写法
+              1)new Vue({watch:{isHot(){}}})
+              2)vm.$watch("isHot",function(){})
+        */
+     	//写法1
+        // watch: {
+        //   isHot: {
+        //     //当isHot发生改变时，会自动调用handler函数
+        //     handler(newValue, oldValue) {
+        //       console.log(newValue, oldValue);
+        //     },
+        //     immediate: true, //初始化时就会执行
+        //   },
+
+        //   // isHot(newValue, oldValue) {
+        //   //   console.log(newValue, oldValue);
+        //   // },
+        // },
+      });
+		//写法2
+		//watch也可以监听info属性
+      vm.$watch("isHot", {
+        handler(newValue, oldValue) {
+          console.log(newValue, oldValue);
+        },
+        immediate: true, //初始化时就会执行
+      });
+```
+
+深度监视
+
+​	（1）Vue中的watch默认不监听对象内部值的改变（一层）
+
+​	（2）配置deep:true可以使监测对象的内部值发生改变（多层）
+
+> TIPS:
+>
+> 	1. Vue自身可以监听到对象内部值的改变，但Vue提供的watch默认不可以
+> 	1. 使用watch时根据数据的具体结构，决定是否采用深度监视
+
+监视多级结构中所有属性的变化
+
+```javascript
+numbers{
+    a:1,
+    b:1
+}
+```
+
+如果直接监视numbers 当a或b发生改变时，监听器handler不会检测到，这是因为handler监听这是numbers 获取不到a和b的状态。
+
+正确使用方式
+
+```
+watch{
+	numbers:{
+		deep:true,
+		handler(){
+			console.log('numbers发生改变')
+		}
+	}
+}
+```
+
