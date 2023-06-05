@@ -821,3 +821,52 @@ watch{
 <div v-else="n===3">也许六月雪会飞进心里</div>
 ```
 
+## 1.12 列表渲染
+
+简单使用
+
+```javascript
+<div id="root">
+  <ul>
+    <!-- 遍历数组并为每个元素指定唯一标识（:key） -->
+    <li v-for="item in arr" :key="item.name">{{item.name}}-{{item.age}}</li>
+  </ul>
+  <!-- 遍历对象 -->
+  <ul>
+    <li v-for="(a,b,c) in car">{{a}}-{{b}}-{{c}}</li>
+  </ul>
+</div>
+<script>
+  new Vue({
+    el: "#root",
+    data: {
+      arr: [
+        { name: "张三", age: 18 },
+        { name: "李四", age: 19 },
+        { name: "王五", age: 20 },
+        { name: "赵六", age: 21 },
+      ],
+      car: {
+        name: "宝马",
+        price: 1000000,
+        color: "red",
+      },
+    },
+  });
+</script>
+```
+
+用index作为key可能会引发的问题：
+若对数据进行：逆序添加、逆序删除等破坏顺序操作：
+会产生没有必要的真实DOM更新 ==> 界面效果没问题, 但效率低。
+
+![image-20230605221536987](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230605221536987.png)
+
+![image-20230605221326324](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230605221326324.png)
+
+使用数组元素的唯一id作为key
+
+- 最好使用每条数据的唯一标识作为key, 比如id、手机号、身份证号、学号等唯一值
+- 如果不存在对数据的逆序添加、逆序删除等破坏顺序操作，仅用于渲染列表用于展示，使用index作为key是没有问题的
+
+![image-20230605221805058](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230605221805058.png)
