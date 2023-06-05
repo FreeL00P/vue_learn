@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/Javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      <h2>列表</h2>
+      <input placeholder="请输入名字" v-model="keyword" />
+      <ul>
+        <li v-for="(item,index) in filterArr" :key="index">
+          {{item.name}}-{{item.age}}<input type="text" />
+        </li>
+      </ul>
+    </div>
+    <script>
+      new Vue({
+        el: "#root",
+        data: {
+          keyword: "",
+          arr: [
+            { id: 1, name: "张三", age: 18 },
+            { id: 2, name: "李三", age: 19 },
+            { id: 3, name: "里五", age: 20 },
+            { id: 4, name: "赵里", age: 21 },
+          ],
+          filterArr: [],
+        },
+        watch: {
+          keyword(val) {
+            console.log(val);
+            this.filterArr = this.arr.filter((item) => {
+              return item.name.indexOf(val) !== -1;
+            });
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
