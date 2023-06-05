@@ -762,3 +762,62 @@ watch{
 }
 ```
 
+## 1.10 绑定样式
+
+绑定样式
+
+1. class 样式
+
+   - 写法：class="xxx" xxx可以是字符串、对象、数组。
+
+     -  字符串写法 适用于：样式的类名不确定，需要动态指定 
+
+     - 对象写法，适用于：要绑定的样式个数确定，名字确定，但需要动态指定用不用 
+
+     - 数组写法，适用于：要绑定的样式个数不确定，名字也不确定
+
+2.  style 样式
+
+   - style="{fontSize:xxx}"其中的xxx是动态值
+   - style="[a,b]"其中a、b是样式对象
+```javascript
+ <!-- 绑定class样式--字符串写法 适用于：样式的类名不确定，需要动态指定 -->
+ <div class="basic" :class="mood" @click="changeMood">{{name}}</div>
+ <!-- 绑定class样式--数组写法，适用于：要绑定的样式个数不确定，名字也不确定 -->
+ <div class="basic" :class="classArr" @click="changeMood">{{name}}</div>
+ <!-- 绑定class样式--对象写法，适用于：要绑定的样式个数确定，名字确定，但需要动态指定用不用 -->
+ <div class="basic" :class="mood" @click="changeMood">{{name}}</div>
+```
+
+## 1.11 条件渲染
+
+条件渲染：
+
+1. v-if
+   - 写法：
+     1. v-if="表达式"
+     2. v-else-if="表达式"
+     3. v-else="表达式"
+   - 适用于切换频率较低的场景
+   - 特点：不展示的dom元素直接移除
+   - 注意：v-if 和v-else-if、v-else可以一起使用，但结构不能被打断
+2. v-show
+   - 写法 v-show="表达式"
+   - 适用于：切换频率较低的场景
+   - 不展示的dom只是被隐藏起来了，并没有被移除
+
+使用示例
+
+```javascript
+ <h2>当前n的值是{{n}}</h2>
+    <button @click="n++">点我n++</button>
+    <!-- 使用v-show做条件渲染 -->
+    <!-- 底层使用display：none dom元素并没有移除-->
+    <!-- <h2 v-show="true">欢迎来到{{name}}</h2> -->
+    <!-- 使用v-if做条件渲染 移除dom元素-->
+    <!-- <h2 v-if="false">欢迎来到{{name}}</h2> -->
+    <div v-if="n===1">也许争不过天和地</div>
+    <div v-else-if="n===2">也许低下头会哭泣</div>
+<div v-else="n===3">也许六月雪会飞进心里</div>
+```
+
