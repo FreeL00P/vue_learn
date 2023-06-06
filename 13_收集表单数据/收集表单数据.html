@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script type="text/Javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      <form @submit.prevent="demo">
+        账号：
+        <input type="text" id="demo" v-model="account" /><br /><br />
+        密码：
+        <input type="password" id="demo" v-model="password" /><br /><br />
+        性别： 男:<input type="radio" name="sex" v-model="sex" value="male" />
+        女:<input type="radio" name="sex" v-model="sex" value="female" /><br /><br />
+        年龄：<input type="number" v-model.number="age" /> 
+        爱好： 
+        学习<input type="checkbox" name="hobby" value="study" v-model="hobby" />
+        打游戏<input type="checkbox" name="hobby" value="game" v-model="hobby"/>
+        吃饭<input type="checkbox" name="hobby" value="eat" v-model="hobby"/><br /><br />
+        所属校区
+        <select v-model="city">
+          <option value="">请选择校区</option>
+          <option value="beijng">北京</option>
+          <option value="shanghai">上海</option>
+          <option value="shenzhen">深圳</option>
+          <option value="changsha">长沙</option></select
+        ><br /><br />
+        其他信息
+        <textarea v-model.lazy="other"></textarea> <br /><br />
+        阅读协议<a href="">《协议》</a
+        ><input type="checkbox" name="agree" v-model="agree" /><br /><br />
+        <button>提交</button>
+      </form>
+    </div>
+    <script>
+      new Vue({
+        el: "#root",
+        data: {
+          account: "",
+          password: "",
+          sex: "female",
+          age: null,
+          hobby: [],
+          city: "",
+          other: "",
+          agree: false,
+        },
+        methods: {
+          demo() {
+            console.log(this._data);
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

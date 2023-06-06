@@ -882,3 +882,167 @@ key是虚拟DOM对象的标识，当数据发生变化时，Vue会根据【新�
 - 如果不存在对数据的逆序添加、逆序删除等破坏顺序操作，仅用于渲染列表用于展示，使用index作为key是没有问题的
 
 ![image-20230605221805058](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230605221805058.png)
+
+## 1.13 vue监测data中的数据
+
+Vue监视数据的原理：
+
+- vue会监视data中所有层次的数据
+
+- 如何监测对象中的数据？
+
+  通过setter实现监视，且要在new Vue时就传入要监测的数据。
+
+  - 对象中后追加的属性，Vue默认不做响应式处理
+
+  - 如需给后添加的属性做响应式，请使用如下API：
+
+    Vue.set(target，propertyName/index，value) 或
+
+    vm.$set(target，propertyName/index，value)
+
+- 如何监测数组中的数据？
+
+  通过包裹数组更新元素的方法实现，本质就是做了两件事：
+
+  - 调用原生对应的方法对数组进行更新
+  - 重新解析模板，进而更新页面
+
+- 在Vue修改数组中的某个元素一定要用如下方法：
+
+  - 使用这些API:push()、pop()、shift()、unshift()、splice()、sort()、reverse()
+  - Vue.set() 或 vm.$set()
+
+> 特别注意：Vue.set() 和 vm.$set() 不能给vm 或 vm的根数据对象 添加属性！！！ 
+
+## 1.14 收集表单数据
+
+- v-model默认收集的是用户输入的value值，
+
+```javascript
+<!-- 准备好一个容器-->
+<div id="root">
+    <form @submit.prevent="demo">
+        账号：<input type="text" v-model.trim="userInfo.account"> <br/><br/>
+        密码：<input type="password" v-model="userInfo.password"> <br/><br/>
+        年龄：<input type="number" v-model.number="userInfo.age"> <br/><br/>
+        <button>提交</button>
+    </form>
+</div>
+
+<script type="text/javascript">
+    Vue.config.productionTip = false
+
+    new Vue({
+        el:'#root',
+        data:{
+            userInfo:{
+                account:'',
+                password:'',
+                age:18,
+            }
+        },
+        methods: {
+            demo(){
+                console.log(JSON.stringify(this.userInfo))
+            }
+        }
+    })
+</script>
+```
+
+- 如果表单是单选下拉列表等，需要自己在标签内加入value属性
+
+```javascript
+<!-- 准备好一个容器-->
+<div id="root">
+    <form @submit.prevent="demo">
+        性别：
+        男<input type="radio" name="sex" v-model="userInfo.sex" value="male">
+        女<input type="radio" name="sex" v-model="userInfo.sex" value="female">
+    </form>
+</div>
+
+<script type="text/javascript">
+    Vue.config.productionTip = false
+
+    new Vue({
+        el:'#root',
+        data:{
+            userInfo:{
+                sex:'female'
+            }
+        },
+        methods: {
+            demo(){
+                console.log(JSON.stringify(this.userInfo))
+            }
+        }
+    })
+</script>
+```
+
+
+
+- 没有配置input的value属性，那么收集的就是checked（勾选 or 未勾选，是布尔值）
+
+- 配置input的value属性:
+  - v-model的初始值是非数组，那么收集的就是checked（勾选 or 未勾选，是布尔值）
+  - v-model的初始值是数组，那么收集的的就是value组成的数组
+
+```javascript
+<!-- 准备好一个容器-->
+<div id="root">
+    <form @submit.prevent="demo">
+        爱好：
+        学习<input type="checkbox" v-model="userInfo.hobby" value="study">
+        打游戏<input type="checkbox" v-model="userInfo.hobby" value="game">
+        吃饭<input type="checkbox" v-model="userInfo.hobby" value="eat">
+        <br/><br/>
+        所属校区
+        <select v-model="userInfo.city">
+            <option value="">请选择校区</option>
+            <option value="beijing">北京</option>
+            <option value="shanghai">上海</option>
+            <option value="shenzhen">深圳</option>
+            <option value="wuhan">武汉</option>
+        </select>
+        <br/><br/>
+        其他信息：
+        <textarea v-model.lazy="userInfo.other"></textarea> <br/><br/>
+        <input type="checkbox" v-model="userInfo.agree">阅读并接受<a href="http://www.atguigu.com">《用户协议》</a>
+        <button>提交</button>
+    </form>
+</div>
+
+<script type="text/javascript">
+    Vue.config.productionTip = false
+
+    new Vue({
+        el:'#root',
+        data:{
+            userInfo:{
+                hobby:[],
+                city:'beijing',
+                other:'',
+                agree:''
+            }
+        },
+        methods: {
+            demo(){
+                console.log(JSON.stringify(this.userInfo))
+            }
+        }
+    })
+</script>
+```
+
+![image-20230606161653320](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230606161653320.png)
+
+v-model的三个修饰符：
+
+lazy：失去焦点再收集数据
+
+number：输入字符串转为有效的数字
+
+trim：输入首尾空格过滤
