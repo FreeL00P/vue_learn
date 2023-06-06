@@ -1167,6 +1167,99 @@ trim：输入首尾空格过滤
 </script>
 ```
 
+## 1.16 自定义指令
+
+需求1：定义一个v-big指令，和v-text功能类似，但会把绑定的数值放大10倍。
+
+需求2：定义一个v-fbind指令，和v-bind功能类似，但可以让其所绑定的input元素默认获取焦点。
+
+**语法：**
+
+局部指令：
+
+```javascript
+<div id="root">
+    <h2>当前值为<span v-text="n"></span></h2>
+    <h2>放大十倍后的n值是：<span v-big="n"></span></h2>
+    <button @click="n++">点我n+1</button>
+    <input type="text" v-fbind:value="n">
+</div>
+<script>
+    new Vue({
+        el:"#root",
+        data:{
+            n:0
+        },
+        directives:{
+        //函数式自定义指令
+        //big函数何时会被？
+        //1.指令第一次绑定到元素上时 
+        //2.指令所在的模板被重新编译时
+        big(el,binding){
+            el.innerHTML = binding.value * 10
+        },
+        //对象式自定义指令
+        fbind:{
+            //指令第一次绑定到元素上时
+            bind(el,binding){
+                console.log("bind")
+                el.innerHTML = binding.value
+            },
+            //指令所在元素被插入到页面时
+            inserted(el,binding){
+                console.log("inserted")
+                el.focus()//让元素获得焦点
+            },
+            //指令所在模板被重新编译时
+            update(el,binding){
+                console.log("update")
+                el.value = binding.value
+            },
+          }
+        },
+
+    })
+</script>
+```
+
+全局指令
+
+```javascript
+<!-- 准备好一个容器-->
+<div id="root">
+    <input type="text" v-fbind:value="n">
+</div>
+
+<script type="text/javascript">
+    Vue.config.productionTip = false
+
+    //定义全局指令
+    Vue.directive('fbind', {
+        // 指令与元素成功绑定时（一上来）
+        bind(element, binding){
+            element.value = binding.value
+        },
+        // 指令所在元素被插入页面时
+        inserted(element, binding){
+            element.focus()
+        },
+        // 指令所在的模板被重新解析时
+        update(element, binding){
+            element.value = binding.value
+        }
+    })
+    
+    new Vue({
+        el:'#root',
+        data:{
+            name: '尚硅谷',
+            n: 1
+        }
+    })
+
+</script>
+```
+
 
 
  

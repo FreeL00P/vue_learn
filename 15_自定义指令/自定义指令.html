@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/Javascript" src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <h2>当前值为<span v-text="n"></span></h2>
+        <h2>放大十倍后的n值是：<span v-big="n"></span></h2>
+        <button @click="n++">点我n+1</button>
+        <input type="text" v-fbind:value="n">
+    </div>
+    <script>
+        new Vue({
+            el:"#root",
+            data:{
+                n:0
+            },
+            directives:{
+                //函数式自定义指令
+                //big函数何时会被？
+                //1.指令第一次绑定到元素上时 
+                //2.指令所在的模板被重新编译时
+                big(el,binding){
+                    el.innerHTML = binding.value * 10
+                },
+                //对象式自定义指令
+                fbind:{
+                    //指令第一次绑定到元素上时
+                    bind(el,binding){
+                        console.log("bind")
+                        el.innerHTML = binding.value
+                    },
+                    //指令所在元素被插入到页面时
+                    inserted(el,binding){
+                        console.log("inserted")
+                        el.focus()//让元素获得焦点
+                    },
+                    //指令所在模板被重新编译时
+                    update(el,binding){
+                        console.log("update")
+                        el.value = binding.value
+                    },
+                }
+            },
+     
+        })
+        //定义一个全局的自定义指令
+        Vue.directive("focus",{
+            inserted(el){
+                el.focus()
+            }
+        })
+    </script>
+</body>
+</html>
