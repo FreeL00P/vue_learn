@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/Javascript" src="../js/vue.js"></script>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- v-cloak指令（没有值）
+        1 本质上是一个属性，用于解决插值语法闪烁的问题
+        2.使用场景：一般用于设置标签的文本内容，
+        3.Vue实例创建之后，会删掉v-cloak属性 
+    -->
+    <div id="root">
+        <h2 v-cloak>{{name}}</h2>
+    </div>
+    <script>
+        new Vue({
+            el:"#root",
+            data:{
+                name:"张三"
+            }
+        })
+    </script>
+</body>
+</html>

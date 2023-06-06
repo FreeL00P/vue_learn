@@ -1046,3 +1046,133 @@ lazy：失去焦点再收集数据
 number：输入字符串转为有效的数字
 
 trim：输入首尾空格过滤
+
+## 1.15 内置指令
+
+- **v-text指令**
+  1. 作用：设置标签的文本内容
+  2. 使用场景：一般用于设置标签的文本内容
+  3.  如果标签中有其他内容，会被覆盖  （使用插值语法不会替换）
+
+```javascript
+<div id="root">
+    <div>你好，{{name}}</div>
+    <div v-text="name">你好</div>
+</div>
+<script>
+    new Vue({
+        el:"#root",
+        data:{
+            name:"张三"
+        }
+    })
+</script>
+```
+
+![image-20230606174458611](C:\Front_Leran\Vue_Learn\assets\image-20230606174458611.png)
+
+ 
+
+   你好被替换成了张三
+
+- **v-html指令：**(使用的很少)
+
+1.作用：向指定节点中渲染包含html结构的内容。
+
+2.与插值语法的区别：
+
+- v-html会替换掉节点中所有的内容，{{xx}}则不会。
+- v-html可以识别html结构。
+
+3.严重注意：v-html有安全性问题！！！！
+
+- 在网站上动态渲染任意HTML是非常危险的，容易导致XSS攻击。
+- 一定要在可信的内容上使用v-html，永不要用在用户提交的内容上！
+
+```javascript
+<div id="root">
+    <div v-html="str"></div>
+</div>
+<script>
+    new Vue({
+        el:"#root",
+        data:{
+            str:"<h1>你好</h1>"
+        }
+    })
+</script>
+```
+
+ **v-cloak指令（没有值）**
+
+1. 本质上是一个属性，用于解决插值语法闪烁的问题
+2. 使用场景：一般用于设置标签的文本内容
+3. Vue实例创建之后，会删掉v-cloak属性 
+
+```javascript
+<div id="root">
+    <h2 v-cloak>{{name}}</h2>
+</div>
+<script>
+    new Vue({
+        el:"#root",
+        data:{
+            name:"张三"
+        }
+    })
+</script>
+```
+
+**v-once指令**
+
+1. v-once指令（没有值）
+2. v-once所在节点动态渲染后，就视为静态内容
+3. 以后数据的改变不会引起v-once所在结构的更新，一般用于优化性能，减少不必要的渲染   
+
+```javascript
+<div id="root">
+    <h2 v-once>初始化的n={{n}}</h2>
+    <h2>n={{n}}</h2>
+    <button @click="n++">n++</button>
+</div>
+<script>
+    new Vue({
+        el:"#root",
+        data:{
+            n:0
+        }
+    })
+</script>
+```
+
+**v-pre指令**
+
+1. 跳过所在节点的编译过程
+2. 可利用它跳过没有指令语法和插值语法的节点，加快编译
+
+```javascript
+<div id="root">
+    <h2 v-pre>vue 其实很简单</h2>
+    <h2 v-once>初始化的n={{n}}</h2>
+    <h2>n={{n}}</h2>
+    <button @click="n++">n++</button>
+</div>
+<script>
+    new Vue({
+        el:"#root",
+        data:{
+            n:0
+        }
+    })
+</script>
+```
+
+
+
+ 
+
+
+
+  
+
+   
