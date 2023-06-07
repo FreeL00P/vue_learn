@@ -1260,12 +1260,231 @@ trim：输入首尾空格过滤
 </script>
 ```
 
+## 1.17 Vue 生命周期
+
+![组件生命周期图示](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/lifecycle.16e4c08e.png)
+
+ ![vue的生命周期的详细图解_vue](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/resize,m_fixed,w_1184.webp)
 
 
- 
 
+## 1.18 非单文件组件
 
+Vue中使用组件的三大步骤：
 
-  
+1. ​        定义组件(创建组件)
+2. ​        注册组件
+3. ​        使用组件(写组件标签)
 
+一、如何定义一个组件？
+
+​        使用Vue.extend(options)创建，其中options和new Vue(options)时传入的那个options几乎一样，但也有点区别；
+
+- 区别如下：
+
+  1. el不要写，为什么？ ——— 最终所有的组件都要经过一个vm的管理，由vm中的el决定服务哪个容器。
+
+  2. data必须写成函数，为什么？ ———— 避免组件被复用时，数据存在引用关系。
+
+​        备注：使用template可以配置组件结构。
+
+二、如何注册组件？
+
+​        1.局部注册：靠new Vue的时候传入components选项
+
+​        2.全局注册：靠Vue.component('组件名',组件)
+
+ 三、编写组件标签：
+
+​        <school></school>
+
+   ```javascript
+   <div id="root">
+       //使用组件
+      <school></school>
+      <hr>
+       <hello></hello>
+        <student></student>
+   </div>
    
+   <script>
+   
+       const hello=Vue.extend({
+           template:`<h2>你好啊</h2>`
+       })
+        //创建全局组件
+        Vue.component('hello',hello)
+       //创建学校组件
+       const school=Vue.extend({
+           data(){
+               return {
+                   name:'尚硅谷',
+                   address:'北京市昌平区'
+               }
+           },
+           template:`
+               <div>
+                   <h2>学校名称：{{name}}</h2>
+                   <h2>学校地址：{{address}}</h2>
+               </div>
+               `
+       })
+       //创建学生组件
+       const student=Vue.extend({
+           data(){
+               return {
+                   name:'张三',
+                   age:18
+               }
+           },
+           template:` 
+                   <div>
+                       <h2>学生名称：{{name}}</h2>
+                       <h2>学生年龄：{{age}}</h2>        
+                   </div>
+           `
+       })
+       //创建vm
+       new Vue({
+           el:'#root',
+           //注册组件
+           components:{
+               school,
+               student
+           }, 
+       })
+   </script>
+   ```
+
+**注意事项**
+
+几个注意点：
+
+   1. 关于组件名:、
+
+      - 一个单词组成：
+
+        1. 第一种写法(首字母小写)：school
+
+        2. 第二种写法(首字母大写)：School
+
+      - 多个单词组成：
+
+        1. 第一种写法(kebab-case命名)：my-school
+
+        2. 第二种写法(CamelCase命名)：MySchool (需要Vue脚手架支持)
+
+        备注：
+
+​              (1).组件名尽可能回避HTML中已有的元素名称，例如：h2、H2都不行。
+
+​              (2).可以使用name配置项指定组件在开发者工具中呈现的名字。
+
+2. 关于组件标签:
+
+- 第一种写法：<school></school>
+-   第二种写法：<school/>
+
+​          备注：不用使用脚手架时，<school/>会导致后续组件不能渲染。
+
+3. 一个简写方式：
+
+​    	 const school = Vue.extend(options) 可简写为：const school = options
+
+```javascript
+<script type="text/javascript">
+    Vue.config.productionTip = false
+
+    //定义组件
+    const s = Vue.extend({
+        name:'atguigu',
+        template:`
+            <div>
+                <h2>学校名称：{{name}}</h2>	
+                <h2>学校地址：{{address}}</h2>	
+            </div>
+        `,
+        data(){
+            return {
+                name:'尚硅谷',
+                address:'北京'
+            }
+        }
+    })
+
+    new Vue({
+        el:'#root',
+        data:{
+            msg:'欢迎学习Vue!'
+        },
+        components:{
+            school:s
+        }
+    })
+</script>
+```
+
+**组件嵌套**
+
+```javascript
+<div id="root">
+
+</div>
+<script>
+     //创建学生组件
+     const student=Vue.extend({
+        data(){
+            return {
+                name:'张三',
+                age:18
+            }
+        },
+        template:` 
+                <div>
+                    <h2>学生名称：{{name}}</h2>
+                    <h2>学生年龄：{{age}}</h2>       
+
+                    </div>
+        `
+    })
+    const school=Vue.extend({
+        data(){
+            return {
+                name:'尚硅谷',
+                address:'北京市昌平区'
+            }
+        },
+        template:`
+            <div>
+                <h2>学校名称：{{name}}</h2>
+                <h2>学校地址：{{address}}</h2>
+                <student></student>
+                </div>
+            `,
+        components:{
+            student
+        }
+    })
+    const app=Vue.extend({
+        components:{
+            school
+        },
+        template:`
+            <div>
+                <h2>根组件</h2>
+                <school></school>
+            </div>
+        `,
+
+    })
+    //注册组件
+    new Vue({
+        el:"#root",
+        components:{
+            app,
+        },
+        template:`<app></app>`
+    })
+</script>
+```
+
