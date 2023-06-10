@@ -280,8 +280,6 @@ Object.defineProperty(person, "sex", {
 });
 ```
 
-
-
 ![image-20230603212541862](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230603212541862.png)
 
 ### 1.6.2 何为数据代理
@@ -339,9 +337,9 @@ set(value) {
 
 ![image-20230603220339044](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230603220339044.png)
 
->![image-20230603220800396](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230603220800396.png)
+> ![image-20230603220800396](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230603220800396.png)
 >
->_data对采用事件劫持对data进行了封装
+> _data对采用事件劫持对data进行了封装
 
 ## 1.7 事件处理
 
@@ -402,7 +400,7 @@ new Vue({
 
 ![image-20230604192441398](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230604192441398.png)
 
->  **如果使用箭头函数，那么this就我去父级寻找，在这里是windows**
+> **如果使用箭头函数，那么this就我去父级寻找，在这里是windows**
 
 ```
 changeNameByValue: (e) => {
@@ -435,8 +433,6 @@ changeNameByValue: (e) => {
 ```javascript
  <button v-on:click="changeNameByValue($event,66)">改名byValue</button>
 ```
-
-
 
 ![image-20230604193513944](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230604193513944.png)
 
@@ -611,7 +607,7 @@ Vue中常用的按键别名：
 - 定义：需要使用的属性，需要用现有属性"计算"得到
 - 优势：与method相比，计算属性用缓存机制，避免多次调用，效率高
 - get函数调用时期
-  - 1.初次读取fullName时。2.所依赖的数据发生变化时。      
+  - 1.初次读取fullName时。2.所依赖的数据发生变化时。
 - Tips
   - 计算属性最终会出现在vm上，直接读取使用即可
   - 如果计算属性要被修改，那必须写set函数去响应修改，且set中要引起计算时依赖的数据发生改变
@@ -656,23 +652,20 @@ Vue中常用的按键别名：
 </script>
 ```
 
- ## 1.9 事件监听
+## 1.9 事件监听
 
  监视属性watch：
 
 1. 当被监视的属性发生改变时，会自动调用handler函数
-
 2. 监视的属性必须存在
-
 3. 当监视的属性发生改变时，会传递两个参数
 
-   ​       1.newValue:改变后的值
+       1.newValue:改变后的值
 
-   ​       2.oldValue:改变前的值
-
+       2.oldValue:改变前的值
 4. .监视的两种写法
 
-   1.  new Vue({watch:{isHot(){}}})
+   1. new Vue({watch:{isHot(){}}})
    2. vm.$watch("isHot",function(){})
 
 ```javascript
@@ -729,14 +722,14 @@ Vue中常用的按键别名：
 
 深度监视
 
-​	（1）Vue中的watch默认不监听对象内部值的改变（一层）
+    （1）Vue中的watch默认不监听对象内部值的改变（一层）
 
-​	（2）配置deep:true可以使监测对象的内部值发生改变（多层）
+    （2）配置deep:true可以使监测对象的内部值发生改变（多层）
 
 > TIPS:
 >
-> 	1. Vue自身可以监听到对象内部值的改变，但Vue提供的watch默认不可以
-> 	1. 使用watch时根据数据的具体结构，决定是否采用深度监视
+> 1. Vue自身可以监听到对象内部值的改变，但Vue提供的watch默认不可以
+> 2. 使用watch时根据数据的具体结构，决定是否采用深度监视
 
 监视多级结构中所有属性的变化
 
@@ -770,16 +763,14 @@ watch{
 
    - 写法：class="xxx" xxx可以是字符串、对象、数组。
 
-     -  字符串写法 适用于：样式的类名不确定，需要动态指定 
-
-     - 对象写法，适用于：要绑定的样式个数确定，名字确定，但需要动态指定用不用 
-
+     - 字符串写法 适用于：样式的类名不确定，需要动态指定
+     - 对象写法，适用于：要绑定的样式个数确定，名字确定，但需要动态指定用不用
      - 数组写法，适用于：要绑定的样式个数不确定，名字也不确定
+2. style 样式
 
-2.  style 样式
+- style="{fontSize:xxx}"其中的xxx是动态值
+- style="[a,b]"其中a、b是样式对象
 
-   - style="{fontSize:xxx}"其中的xxx是动态值
-   - style="[a,b]"其中a、b是样式对象
 ```javascript
  <!-- 绑定class样式--字符串写法 适用于：样式的类名不确定，需要动态指定 -->
  <div class="basic" :class="mood" @click="changeMood">{{name}}</div>
@@ -888,32 +879,28 @@ key是虚拟DOM对象的标识，当数据发生变化时，Vue会根据【新�
 Vue监视数据的原理：
 
 - vue会监视data中所有层次的数据
-
 - 如何监测对象中的数据？
 
   通过setter实现监视，且要在new Vue时就传入要监测的数据。
 
   - 对象中后追加的属性，Vue默认不做响应式处理
-
   - 如需给后添加的属性做响应式，请使用如下API：
 
     Vue.set(target，propertyName/index，value) 或
 
     vm.$set(target，propertyName/index，value)
-
 - 如何监测数组中的数据？
 
   通过包裹数组更新元素的方法实现，本质就是做了两件事：
 
   - 调用原生对应的方法对数组进行更新
   - 重新解析模板，进而更新页面
-
 - 在Vue修改数组中的某个元素一定要用如下方法：
 
   - 使用这些API:push()、pop()、shift()、unshift()、splice()、sort()、reverse()
   - Vue.set() 或 vm.$set()
 
-> 特别注意：Vue.set() 和 vm.$set() 不能给vm 或 vm的根数据对象 添加属性！！！ 
+> 特别注意：Vue.set() 和 vm.$set() 不能给vm 或 vm的根数据对象 添加属性！！！
 
 ## 1.14 收集表单数据
 
@@ -982,11 +969,9 @@ Vue监视数据的原理：
 </script>
 ```
 
-
-
 - 没有配置input的value属性，那么收集的就是checked（勾选 or 未勾选，是布尔值）
-
 - 配置input的value属性:
+
   - v-model的初始值是非数组，那么收集的就是checked（勾选 or 未勾选，是布尔值）
   - v-model的初始值是数组，那么收集的的就是value组成的数组
 
@@ -1052,7 +1037,7 @@ trim：输入首尾空格过滤
 - **v-text指令**
   1. 作用：设置标签的文本内容
   2. 使用场景：一般用于设置标签的文本内容
-  3.  如果标签中有其他内容，会被覆盖  （使用插值语法不会替换）
+  3. 如果标签中有其他内容，会被覆盖  （使用插值语法不会替换）
 
 ```javascript
 <div id="root">
@@ -1070,8 +1055,6 @@ trim：输入首尾空格过滤
 ```
 
 ![image-20230606174458611](C:\Front_Leran\Vue_Learn\assets\image-20230606174458611.png)
-
- 
 
    你好被替换成了张三
 
@@ -1107,7 +1090,7 @@ trim：输入首尾空格过滤
 
 1. 本质上是一个属性，用于解决插值语法闪烁的问题
 2. 使用场景：一般用于设置标签的文本内容
-3. Vue实例创建之后，会删掉v-cloak属性 
+3. Vue实例创建之后，会删掉v-cloak属性
 
 ```javascript
 <div id="root">
@@ -1127,7 +1110,7 @@ trim：输入首尾空格过滤
 
 1. v-once指令（没有值）
 2. v-once所在节点动态渲染后，就视为静态内容
-3. 以后数据的改变不会引起v-once所在结构的更新，一般用于优化性能，减少不必要的渲染   
+3. 以后数据的改变不会引起v-once所在结构的更新，一般用于优化性能，减少不必要的渲染
 
 ```javascript
 <div id="root">
@@ -1248,7 +1231,7 @@ trim：输入首尾空格过滤
             element.value = binding.value
         }
     })
-    
+  
     new Vue({
         el:'#root',
         data:{
@@ -1266,39 +1249,36 @@ trim：输入首尾空格过滤
 
  ![vue的生命周期的详细图解_vue](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/resize,m_fixed,w_1184.webp)
 
-
-
 ## 1.18 非单文件组件
 
 Vue中使用组件的三大步骤：
 
-1. ​        定义组件(创建组件)
-2. ​        注册组件
-3. ​        使用组件(写组件标签)
+1.     定义组件(创建组件)
+2.     注册组件
+3.     使用组件(写组件标签)
 
 一、如何定义一个组件？
 
-​        使用Vue.extend(options)创建，其中options和new Vue(options)时传入的那个options几乎一样，但也有点区别；
+    使用Vue.extend(options)创建，其中options和new Vue(options)时传入的那个options几乎一样，但也有点区别；
 
 - 区别如下：
 
   1. el不要写，为什么？ ——— 最终所有的组件都要经过一个vm的管理，由vm中的el决定服务哪个容器。
-
   2. data必须写成函数，为什么？ ———— 避免组件被复用时，数据存在引用关系。
 
-​        备注：使用template可以配置组件结构。
+    备注：使用template可以配置组件结构。
 
 二、如何注册组件？
 
-​        1.局部注册：靠new Vue的时候传入components选项
+    1.局部注册：靠new Vue的时候传入components选项
 
-​        2.全局注册：靠Vue.component('组件名',组件)
+    2.全局注册：靠Vue.component('组件名',组件)
 
  三、编写组件标签：
 
-​        <school></school>
+    `<school></school>`
 
-   ```javascript
+```javascript
    <div id="root">
        //使用组件
       <school></school>
@@ -1340,7 +1320,7 @@ Vue中使用组件的三大步骤：
            template:` 
                    <div>
                        <h2>学生名称：{{name}}</h2>
-                       <h2>学生年龄：{{age}}</h2>        
+                       <h2>学生年龄：{{age}}</h2>      
                    </div>
            `
        })
@@ -1354,42 +1334,39 @@ Vue中使用组件的三大步骤：
            }, 
        })
    </script>
-   ```
+```
 
 **注意事项**
 
 几个注意点：
 
-   1. 关于组件名:、
+1. 关于组件名:、
 
-      - 一个单词组成：
+   - 一个单词组成：
 
-        1. 第一种写法(首字母小写)：school
+     1. 第一种写法(首字母小写)：school
+     2. 第二种写法(首字母大写)：School
+   - 多个单词组成：
 
-        2. 第二种写法(首字母大写)：School
+     1. 第一种写法(kebab-case命名)：my-school
+     2. 第二种写法(CamelCase命名)：MySchool (需要Vue脚手架支持)
 
-      - 多个单词组成：
+     备注：
 
-        1. 第一种写法(kebab-case命名)：my-school
+    (1).组件名尽可能回避HTML中已有的元素名称，例如：h2、H2都不行。
 
-        2. 第二种写法(CamelCase命名)：MySchool (需要Vue脚手架支持)
-
-        备注：
-
-​              (1).组件名尽可能回避HTML中已有的元素名称，例如：h2、H2都不行。
-
-​              (2).可以使用name配置项指定组件在开发者工具中呈现的名字。
+    (2).可以使用name配置项指定组件在开发者工具中呈现的名字。
 
 2. 关于组件标签:
 
-- 第一种写法：<school></school>
--   第二种写法：<school/>
+- 第一种写法：`<school></school>`
+- 第二种写法：`<school/>`
 
-​          备注：不用使用脚手架时，<school/>会导致后续组件不能渲染。
+    备注：不用使用脚手架时，`<school/>`会导致后续组件不能渲染。
 
 3. 一个简写方式：
 
-​    	 const school = Vue.extend(options) 可简写为：const school = options
+    const school = Vue.extend(options) 可简写为：const school = options
 
 ```javascript
 <script type="text/javascript">
@@ -1400,8 +1377,8 @@ Vue中使用组件的三大步骤：
         name:'atguigu',
         template:`
             <div>
-                <h2>学校名称：{{name}}</h2>	
-                <h2>学校地址：{{address}}</h2>	
+                <h2>学校名称：{{name}}</h2>
+                <h2>学校地址：{{address}}</h2>
             </div>
         `,
         data(){
@@ -1442,7 +1419,7 @@ Vue中使用组件的三大步骤：
         template:` 
                 <div>
                     <h2>学生名称：{{name}}</h2>
-                    <h2>学生年龄：{{age}}</h2>       
+                    <h2>学生年龄：{{age}}</h2>     
 
                     </div>
         `
@@ -1494,7 +1471,7 @@ Vue中使用组件的三大步骤：
 
 ### 脚手架文件结构
 
-	├── node_modules 
+    ├── node_modules
 	├── public
 	│   ├── favicon.ico: 页签图标
 	│   └── index.html: 主页面
@@ -1514,11 +1491,314 @@ Vue中使用组件的三大步骤：
 ### 关于不同版本的Vue
 
 1. vue.js与vue.runtime.xxx.js的区别：
-    1. vue.js是完整版的Vue，包含：核心功能 + 模板解析器。
-    2. vue.runtime.xxx.js是运行版的Vue，只包含：核心功能；没有模板解析器。
+   1. vue.js是完整版的Vue，包含：核心功能 + 模板解析器。
+   2. vue.runtime.xxx.js是运行版的Vue，只包含：核心功能；没有模板解析器。
 2. 因为vue.runtime.xxx.js没有模板解析器，所以不能使用template这个配置项，需要使用render函数接收到的createElement函数去指定具体内容。
 
 ### vue.config.js配置文件
 
 1. 使用vue inspect > output.js可以查看到Vue脚手架的默认配置。
 2. 使用vue.config.js可以对脚手架进行个性化定制，详情见：https://cli.vuejs.org/zh
+
+## 02 ref属性
+
+1. 被用来给元素或子组件注册引用信息（id的替代者）
+2. 应用在html标签上获取的是真实DOM元素，应用在组件标签上是组件实例对象（vc）
+3. 使用方式：
+   1. 打标识：`<h1 ref="xxx">.....</h1>` 或 `<School ref="xxx"></School>`
+   2. 获取：`this.$refs.xxx`
+
+## 03 props配置项
+
+1. 功能：让组件接收外部传过来的数据
+2. 传递数据：`<Demo name="xxx"/>`
+3. 接收数据：
+
+   1. 第一种方式（只接收）：`props:['name'] `
+   2. 第二种方式（限制类型）：`props:{name:String}`
+   3. 第三种方式（限制类型、限制必要性、指定默认值）：
+
+      ```
+      props:{
+      	name:{
+      	type:String, //类型
+      	required:true, //必要性
+      	default:'老王' //默认值
+      	}
+      }
+      ```
+
+   > 注意：props是只读的，Vue底层会监测你对props的修改，如果进行了修改，就会发出警告，若业务需求确实需要修改，那么请复制props的内容到data中一份，然后去修改data中的数据。
+   >
+
+```javascript
+export default {
+    name: 'Student',
+    data() {
+        return {
+            msg: '学生',
+        }
+    },
+    methods:{
+        updateAge(){
+            this.age++//vue 不建议直接修改props中的值
+        }
+    },
+    //props:["name", "age", "sex"]//简单声明接受
+
+    //接受的同时，进行类型限制
+    props:{
+        name:{
+            type:String,
+            required:true,//必须传递
+
+        },
+        age:{
+            type:Number,
+            default:99,//默认值
+        },
+        sex:{
+            typeof:String,
+            required:true,
+        }
+    }
+}
+```
+
+## 04 mixin(混入)
+
+1. 功能：可以把多个组件共用的配置提取成一个混入对象
+2. 使用方式：
+
+   第一步定义混合：
+
+   ```
+   {
+       data(){....},
+       methods:{....}
+       ....
+   }
+   ```
+
+   第二步使用混入：
+
+   全局混入：`Vue.mixin(xxx)` 局部混入：`mixins:['xxx']	`
+
+```javascript
+//全局混合
+import {mixin} from './mixin'
+Vue.mixin(mixin)
+export const mixin={
+    methods:{
+        showName(){
+            alert(this.name)
+        }
+    },
+    mounted(){
+        console.log('mix mounted')
+    }
+}
+import {mixin} from '../mixin'
+export default {
+    name: 'Student',
+    data() {
+        return {
+            name: '张三',
+            sex: '男',
+        }
+    },
+    // methods:{
+    //    showName(){
+    //        alert(this.name)
+    //    }
+    // },
+   mixins:[mixin]
+
+
+}
+```
+
+## 05 插件
+
+1. 功能：用于增强Vue
+2. 本质：包含install方法的一个对象，install的第一个参数是Vue，第二个以后的参数是插件使用者传递的数据。
+3. 定义插件：
+
+   ```
+   对象.install = function (Vue, options) {
+       // 1. 添加全局过滤器
+       Vue.filter(....)
+
+       // 2.定义全局指令局指令
+       Vue.directive(....)
+
+       // 3. 配置全局混入(合)
+       Vue.mixin(....)
+
+       // 4. 添加实例方法
+       Vue.prototype.$myMethod = function () {...}
+       Vue.prototype.$myProperty = xxxx
+   }
+   ```
+4. 使用插件：`Vue.use()`
+
+```javascript
+export default{
+    install(Vue){
+        //全局过滤器
+        Vue.filter('mySlice',function(value){
+            return value.slice(0,4)
+        })
+        //定义全局指令
+        Vue.directive('fbind',{
+            //指令与元素成功绑定时（一上来）
+            bind(element,binding){
+                element.value = binding.value
+            },
+            //指令所在元素被插入页面时
+            inserted(element,binding){
+                element.focus()
+            },
+            //指令所在的模板被重新解析时
+            update(element,binding){
+                element.value = binding.value
+            }
+        })
+        //定义一个全局的混合
+        Vue.mixin({
+            data(){
+                return{
+                    x:100,
+                    y:200
+                }
+            },
+            methods:{
+                showName(){
+                    alert(this.name)
+                }
+            }
+        })
+        //给Vue的原型上添加一个方法
+        Vue.prototype.demo=()=> alert('hello')
+      
+    }
+}
+//引入插件
+import plugins from './plugins'
+Vue.use(plugins)
+```
+
+## 06 scoped样式
+
+1. 作用：让样式在局部生效，防止冲突。
+2. 写法：`<style scoped>`
+
+```javasc
+school组件
+<style scoped>
+.demo{
+    background-color: skyblue;
+}
+</style>
+student组件
+<style scoped>
+.demo {
+    background-color: orange;
+  }
+</style>
+```
+
+![image-20230610155809658](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230610155809658.png)
+
+## 07 总结TodoList案例
+
+1. 组件化编码流程：
+
+   (1).拆分静态组件：组件要按照功能点拆分，命名不要与html元素冲突。
+
+   (2).实现动态组件：考虑好数据的存放位置，数据是一个组件在用，还是一些组件在用：
+
+   1).一个组件在用：放在组件自身即可。
+
+   2). 一些组件在用：放在他们共同的父组件上（状态提升）。
+
+   (3).实现交互：从绑定事件开始。
+2. props适用于：
+
+   (1).父组件 ==> 子组件 通信
+
+   (2).子组件 ==> 父组件 通信（要求父先给子一个函数）
+3. 使用v-model时要切记：v-model绑定的值不能是props传过来的值，因为props是不可以修改的！
+4. props传过来的若是对象类型的值，修改对象中的属性时Vue不会报错，但不推荐这样做。
+
+**父组件注册方法**
+
+```javascript
+ methods:{
+  addTodo(todoObj){
+    console.log("我是App组件,我接收到了",todoObj)
+    this.todos.unshift(todoObj)
+  },
+  //取消勾选一个todo
+  checkTodo(id){
+      this.todos.forEach((item)=>{
+        if(item.id===id){
+          item.isFinished=!item.isFinished
+          console.log(item)
+        }
+      })
+  },
+  //删除一个todo
+  deleteTodo(id){
+    console.log("我是App组件,我接收到了",id)
+   this.todos=this.todos.filter(item=>item.id!==id)
+  },
+  //全选或者全不选
+  checkAll(checked){
+    checked?
+    this.todos.forEach(todo=>todo.isFinished=true):
+    this.todos.forEach(todo=>todo.isFinished=false)
+  },
+  //清除所有已完成的
+  clearAllFinished(){
+    this.todos=this.todos.filter(todo=>!todo.isFinished)
+  }
+}
+```
+
+**方法传递给子组件**
+
+```javascript
+<div id="root">
+  <div class="todo-container">
+    <div class="todo-wrap">
+      <MyHeader :addTodo="addTodo"/>
+      <MyList :todos="todos" 
+      :checkTodo="checkTodo"
+      :deleteTodo="deleteTodo"
+      />
+      <MyFooter :todos="todos" :checkAll="checkAll"
+      :clearAllFinished="clearAllFinished"
+      />
+    </div>
+  </div>
+</div>
+```
+
+**子组件接受和使用**
+
+```javascript
+//声明接受父组件传递过来的数据
+props: ['todo','checkTodo','deleteTodo'],
+methods:{
+    handleCheck(id){
+      //通知App组件，取消勾选一个todo
+      this.checkTodo(id)
+    } ,
+    //删除
+    handleDelete(id){
+      //通知App组件，删除一个todo
+      this.deleteTodo(id)
+    } 
+  }
+```
