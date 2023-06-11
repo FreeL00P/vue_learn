@@ -6,7 +6,7 @@
     "moduleResolution": "node",
     "paths": {
       "@/*": [
-        "src/*"
+        "11_TodoList案例_自定义事件/*"
       ]
     },
     "lib": [
