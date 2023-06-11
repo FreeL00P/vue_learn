@@ -661,7 +661,7 @@ Vue中常用的按键别名：
 3. 当监视的属性发生改变时，会传递两个参数
 
        1.newValue:改变后的值
-
+       
        2.oldValue:改变前的值
 4. .监视的两种写法
 
@@ -723,7 +723,7 @@ Vue中常用的按键别名：
 深度监视
 
     （1）Vue中的watch默认不监听对象内部值的改变（一层）
-
+    
     （2）配置deep:true可以使监测对象的内部值发生改变（多层）
 
 > TIPS:
@@ -1271,7 +1271,7 @@ Vue中使用组件的三大步骤：
 二、如何注册组件？
 
     1.局部注册：靠new Vue的时候传入components选项
-
+    
     2.全局注册：靠Vue.component('组件名',组件)
 
  三、编写组件标签：
@@ -1472,21 +1472,21 @@ Vue中使用组件的三大步骤：
 ### 脚手架文件结构
 
     ├── node_modules
-	├── public
-	│   ├── favicon.ico: 页签图标
-	│   └── index.html: 主页面
-	├── src
-	│   ├── assets: 存放静态资源
-	│   │   └── logo.png
-	│   │── component: 存放组件
-	│   │   └── HelloWorld.vue
-	│   │── App.vue: 汇总所有组件
-	│   │── main.js: 入口文件
-	├── .gitignore: git版本管制忽略的配置
-	├── babel.config.js: babel的配置文件
-	├── package.json: 应用包配置文件
-	├── README.md: 应用描述文件
-	├── package-lock.json：包版本控制文件
+    ├── public
+    │   ├── favicon.ico: 页签图标
+    │   └── index.html: 主页面
+    ├── src
+    │   ├── assets: 存放静态资源
+    │   │   └── logo.png
+    │   │── component: 存放组件
+    │   │   └── HelloWorld.vue
+    │   │── App.vue: 汇总所有组件
+    │   │── main.js: 入口文件
+    ├── .gitignore: git版本管制忽略的配置
+    ├── babel.config.js: babel的配置文件
+    ├── package.json: 应用包配置文件
+    ├── README.md: 应用描述文件
+    ├── package-lock.json：包版本控制文件
 
 ### 关于不同版本的Vue
 
@@ -1628,13 +1628,13 @@ export default {
    对象.install = function (Vue, options) {
        // 1. 添加全局过滤器
        Vue.filter(....)
-
+   
        // 2.定义全局指令局指令
        Vue.directive(....)
-
+   
        // 3. 配置全局混入(合)
        Vue.mixin(....)
-
+   
        // 4. 添加实例方法
        Vue.prototype.$myMethod = function () {...}
        Vue.prototype.$myProperty = xxxx
@@ -1802,3 +1802,62 @@ methods:{
     } 
   }
 ```
+
+## 08 webStorage
+
+1. 存储内容大小一般支持5MB左右（不同浏览器可能还不一样）
+
+2. 浏览器端通过 Window.sessionStorage 和 Window.localStorage 属性来实现本地存储机制。
+
+3. 相关API：
+
+   1. `xxxxxStorage.setItem('key', 'value');` 该方法接受一个键和值作为参数，会把键值对添加到存储中，如果键名存在，则更新其对应的值。
+
+   2. `xxxxxStorage.getItem('person');`
+
+       该方法接受一个键名作为参数，返回键名对应的值。
+
+   3. `xxxxxStorage.removeItem('key');`
+
+       该方法接受一个键名作为参数，并把该键名从存储中删除。
+
+   4. ` xxxxxStorage.clear()`
+
+       该方法会清空存储中的所有数据。
+
+4. 备注：
+
+   1. SessionStorage存储的内容会随着浏览器窗口关闭而消失。
+   2. LocalStorage存储的内容，需要手动清除才会消失。
+   3. `xxxxxStorage.getItem(xxx)`如果xxx对应的value获取不到，那么getItem的返回值是null。
+   4. `JSON.parse(null)`的结果依然是null。
+
+## 09 组件的自定义事件
+
+1. 一种组件间通信的方式，适用于：**子组件 ===> 父组件**
+
+2. 使用场景：A是父组件，B是子组件，B想给A传数据，那么就要在A中给B绑定自定义事件（事件的回调在A中）。
+
+3. 绑定自定义事件：
+
+   1. 第一种方式，在父组件中：`<Demo @atguigu="test"/>` 或 `<Demo v-on:atguigu="test"/>`
+
+   2. 第二种方式，在父组件中：
+
+      ```
+      <Demo ref="demo"/>
+      ......
+      mounted(){
+         this.$refs.xxx.$on('atguigu',this.test)
+      }
+      ```
+
+   3. 若想让自定义事件只能触发一次，可以使用`once`修饰符，或`$once`方法。
+
+4. 触发自定义事件：`this.$emit('atguigu',数据)`
+
+5. 解绑自定义事件`this.$off('atguigu')`
+
+6. 组件上也可以绑定原生DOM事件，需要使用`native`修饰符。
+
+7. 注意：通过`this.$refs.xxx.$on('atguigu',回调)`绑定自定义事件时，回调要么配置在methods中，要么用箭头函数，否则this指向会出问题！

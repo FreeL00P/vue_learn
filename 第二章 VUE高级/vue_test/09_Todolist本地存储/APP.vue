@@ -28,11 +28,7 @@
         },
         data(){
           return {
-            todos:[
-                {id:1,title:"吃饭",isFinished:false},
-                {id:2,title:"睡觉",isFinished:false},
-                {id:3,title:"打豆豆",isFinished:true},
-            ]
+            todos:JSON.parse(localStorage.getItem('todos'))||[]
         }
         },
         methods:{
@@ -64,7 +60,15 @@
           clearAllFinished(){
             this.todos=this.todos.filter(todo=>!todo.isFinished)
           }
-        }
+        },
+        watch:{
+          todos:{
+            deep:true,
+            handler(value){
+              localStorage.setItem("todos",JSON.stringify(value))
+            }
+          }
+        },
     }
 </script>
 
