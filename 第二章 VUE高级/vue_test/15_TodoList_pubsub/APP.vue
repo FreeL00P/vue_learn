@@ -49,12 +49,6 @@
             console.log("删除",id)
            this.todos=this.todos.filter(item=>item.id!==id)
           },
-          //编辑
-          editTodo(todo,value){
-            console.log("开始编辑",todo)
-            todo.title=value
-            console.log("完毕",todo)
-          },
           //全选或者全不选
           checkAll(checked){
             checked?
@@ -78,8 +72,8 @@
         mounted(){
           // this.$bus.$on("deleteTodo",this.deleteTodo),
           // this.$bus.$on("checkTodo",this.checkTodo)
-          this.$bus.$on("updateTodo",this.editTodo)
           //订阅消息
+          
           pubsub.subscribe('deleteTodo',(msg,id)=>{
             console.log("deleteTodo，执行了回调函数")
             console.log(msg,id)
@@ -90,12 +84,10 @@
             console.log(msg,id)
             this.checkTodo(id)
           })
-          
         },
         beforeDestroy(){
           // this.$bus.$off("deleteTodo"),
           // this.$bus.$off("checkTodo")
-          this.$bus.$off("updateTodo")
           //取消订阅
           pubsub.unsubscribe('deleteTodo')
           pubsub.unsubscribe('checkTodo')
@@ -132,14 +124,7 @@ body {
   color: #fff;
   background-color: #bd362f;
 }
-.btn-edit{
-  color: #fff;
-  background-color: skyblue;
-  border: 1px solid rgb(68, 190, 239);
-}
-.btn-edit:hover{
-  background-color: rgb(68, 190, 239);
-}
+
 .btn:focus {
   outline: none;
 }

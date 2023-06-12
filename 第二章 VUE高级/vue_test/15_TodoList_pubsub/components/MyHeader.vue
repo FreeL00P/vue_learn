@@ -22,9 +22,10 @@ export default {
           const todoObj={
             id:nanoid(),
             title:e.target.value,
-            isFinished:false,
+            isFinished:false
           }
           console.log(todoObj)
+
           this.$emit("addTodo",todoObj)
           //清空用户的输入
           e.target.value=""

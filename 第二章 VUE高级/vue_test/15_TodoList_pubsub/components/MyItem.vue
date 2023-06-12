@@ -2,15 +2,9 @@
         <li >
           <label>
             <input type="checkbox" :checked="todo.isFinished" @click="handleCheck(todo.id)" />
-            <span v-show="!todo.isEdit"> {{todo.title}}</span>
-            <input v-show="todo.isEdit" 
-            type="text" 
-            :value="todo.title" 
-            @blur="handleBlur(todo,$event)"
-            ref="InputTitle"/>
+            <span> {{todo.title}}</span>
           </label>
           <button class="btn btn-danger" @click="handleDelete(todo.id)">删除</button>
-          <button v-show="!todo.isEdit"  class="btn btn-edit" @click="handleEdit(todo)">编辑</button>
         </li>
 </template>
 
@@ -37,32 +31,7 @@ export default {
           // this.$bus.$emit("deleteTodo",id)
           //发布消息
           pubsub.publish('deleteTodo',id)
-        },
-        //编辑
-        handleEdit(todo){
-          //如果已经是编辑状态，就不要再添加isEdit属性了
-          if(todo.hasOwnProperty('isEdit')){
-             todo.isEdit=true
-          }else{
-            this.$set(todo,'isEdit',true)
-          }
-          //让文本框获取焦点 
-          //$nextTick()是在下一次DOM更新循环结束之后执行延迟回调
-          this.$nextTick(()=>{
-            this.$refs.InputTitle.focus()
-          })
-        },
-        //失去焦点回调
-        handleBlur(todo,e){
-          console.log('失去焦点',todo,e.target.value);
-          todo.isEdit=false
-          if(e.target.value==todo.title||e.target.value.trim()==''){
-            alert('输入的内容不合法')
-            e.target.value=todo.title
-            return
-          }
-          this.$bus.$emit('updateTodo',todo,e.target.value)
-        }
+        } 
       }
     }
 </script>
