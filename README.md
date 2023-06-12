@@ -1969,3 +1969,168 @@ methods:{
 1. 语法：`this.$nextTick(回调函数)`
 2. 作用：在下一次 DOM 更新结束后执行其指定的回调。
 3. 什么时候用：当改变数据后，要基于更新后的新DOM进行某些操作时，要在nextTick所指定的回调函数中执行。
+
+## 14 Vue封装的过度与动画
+
+1. 作用：在插入、更新或移除 DOM元素时，在合适的时候给元素添加样式类名。
+
+2. 图示：![image-20230612191059222](https://freelooptc.oss-cn-shenzhen.aliyuncs.com/image-20230612191059222.png)
+
+3. 写法：
+
+   1. 准备好样式：
+
+      - 元素进入的样式：
+        1. v-enter：进入的起点
+        2. v-enter-active：进入过程中
+        3. v-enter-to：进入的终点
+      - 元素离开的样式：
+        1. v-leave：离开的起点
+        2. v-leave-active：离开过程中
+        3. v-leave-to：离开的终点
+
+   2. 使用`<transition>`包裹要过度的元素，并配置name属性：
+
+      ```
+      <transition name="hello">
+      	<h1 v-show="isShow">你好啊！</h1>
+      </transition>
+      ```
+
+      
+
+   3. 备注：若有多个元素需要过度，则需要使用：`<transition-group>`，且每个元素都要指定`key`值。
+
+   可以使用css动画库，这里提供一个
+
+   [Animate.css | https://animate.style/](https://animate.style/)
+
+## 15 vue脚手架配置代理
+
+### ajax请求我们使用axios
+
+#### AJAX
+
+AJAX（Asynchronous JavaScript and XML）是一种Web开发技术，它允许网页在不刷新的情况下发送和接受数据。传统的Web应用程序采用同步请求，即当用户执行某些操作时，它会向服务器发送请求并等待响应。而AJAX则允许异步请求，在后台发送请求并继续执行其他任务，当服务器响应时再进行处理。这种技术可以提高网站性能，并允许动态更新网页内容。
+
+##### 工作原理
+
+AJAX使用XMLHttpRequest对象进行通信，该对象允许网页向服务器发送HTTP请求并获取响应。通过这种方式，网页可以在不刷新页面的情况下更新部分内容。
+
+1. 创建XMLHttpRequest对象
+2. 发送HTTP请求
+3. 接收服务器响应
+4. 更新网页内容
+
+#### Axios
+
+Axios是一个基于Promise的HTTP客户端库，它允许在浏览器和Node.js中发送异步HTTP请求。Axios支持所有现代浏览器，包括IE8+，IE9+和IE11+。它提供了易于使用的API，可以轻松地将其集成到任何项目中。与jQuery.ajax()和原生XMLHttpRequest相比，Axios提供了更多的功能和更好的错误处理。
+
+##### 工作原理
+
+Axios通过创建XMLHttpRequest对象发送HTTP请求，并返回一个Promise对象，该对象可以处理成功和失败的情况。Axios还提供了拦截器，可以在请求和响应之前或之后执行处理程序。
+
+1. 创建一个Axios实例
+2. 发送HTTP请求
+3. 处理成功或失败的结果
+
+#### 在npm中下载axios
+
+```
+npm i axios
+```
+
+```
+// 引入JavaScript方法
+import axios from 'axios'
+```
+
+### 方法一：vue-cil配置防止跨域，代理服务器
+
+ 在vue.config.js中添加如下配置：
+
+```
+devServer:{
+  proxy:"http://localhost:5000"
+}
+```
+
+说明：
+
+1. 优点：配置简单，请求资源时直接发给前端（8080）即可。
+2. 缺点：不能配置多个代理，不能灵活的控制请求是否走代理。
+3. 工作方式：若按照上述配置代理，当请求了前端不存在的资源时，那么该请求会转发给服务器 （优先匹配前端资源）
+
+> 此时ajax请求发送端口就不是5000了，而是当前服务器的端口，然后由代理服务器进行转发。
+>
+> 此时请求策略是：如果ajax在8080端口服务器中请求不到（默认是请求public文件夹下的东西），就会转发到5500端口服务器
+
+### 方法二：根据规则进行代理
+
+ 编写vue.config.js配置具体代理规则：
+
+```
+module.exports = {
+	devServer: {
+      proxy: {
+      '/api1': {// 匹配所有以 '/api1'开头的请求路径
+        target: 'http://localhost:5000',// 代理目标的基础路径
+        changeOrigin: true,
+        pathRewrite: {'^/api1': ''}
+      },
+      '/api2': {// 匹配所有以 '/api2'开头的请求路径
+        target: 'http://localhost:5001',// 代理目标的基础路径
+        changeOrigin: true,
+        pathRewrite: {'^/api2': ''}
+      }
+    }
+  }
+}
+/*
+   changeOrigin设置为true时，服务器收到的请求头中的host为：localhost:5000
+   changeOrigin设置为false时，服务器收到的请求头中的host为：localhost:8080
+   changeOrigin默认值为true
+*/
+```
+
+说明：
+
+1. 优点：可以配置多个代理，且可以灵活的控制请求是否走代理。
+2. 缺点：配置略微繁琐，请求资源时必须加前缀。
+
+### 使用 Vue CLI 提供的 `defineConfig` 方法来创建配置对象（视频上使用的案例）
+
+其实就是通过使用 Vue CLI 提供的 `defineConfig` 方法来创建一个配置对象。该方法可以获取到 Vue CLI 默认的配置信息，并且支持传入一个函数作为参数。在这个函数中，可以对默认配置信息进行修改和扩展，并且可以使用 Vue CLI 提供的 API 来自动生成某些配置信息。
+
+下面是使用`defineConfig`方法来创建配置对象
+
+```
+const { defineConfig } = require('@vue/cli-service');
+
+module.exports = defineConfig(config => {
+  // 添加自定义插件
+  config.plugins.push(new MyCustomPlugin());
+  
+  // 自动设置别名
+  config.resolve.alias.set('utils', path.resolve(__dirname, 'src/utils'));
+
+  // 对开发服务器进行详细配置（方式二）
+  config.devServer = {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        pathRewrite: {'^/api': ''}
+      }
+    }
+  };
+
+  return config;
+});
+```
+
+在这个示例代码中，我们传给 `defineConfig` 方法一个函数作为参数，并将其命名为 `config`。在这个函数中，我们对 Vue CLI 默认的配置信息进行了一些修改和扩展，如添加自定义插件、自动设置别名和对开发服务器进行详细配置等。
+
+其中最重要的部分是使用 `config.resolve.alias.set()` 方法来设置别名，以便更方便地引用项目中的模块。另外，还对开发服务器进行了详细的配置，这里采用的是第二种方式，即使用对象字面量的方式。
+
+总之，使用 `defineConfig` 方法可以更灵活和方便地定制化应用程序的行为和功能，并能够充分利用 Vue CLI 所提供的工具和 API。
