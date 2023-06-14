@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import {mapState,mapGetters,mapActions,mapMutations} from 'vuex'	
-export default {
+import {mapState,mapGetters,mapActions,mapMutations} from 'vuex'
+	export default {
 		name:'Count',
 		data() {
 			return {
@@ -28,19 +28,17 @@ export default {
 		},
 		methods: {
 
-			...mapMutations('countAbout',['INCREMENT','DECREMENT']),	
+			...mapMutations(['INCREMENT','DECREMENT']),	
 		
-			...mapActions('countAbout',['incrementOdd','incrementWait']),
+			...mapActions(['incrementOdd','incrementWait']),
 		},
 		mounted(){
 			console.log("Count",this.$store)
 		},
 		//使用vuex的辅助函数mapState，从getters中获取数据
 		computed:{
-			//使用命名空间获取数据（必须先开启命名空间）
-			...mapState('countAbout',['sum','school','subject']),
-			...mapState('personAbout',['personList']),
-			...mapGetters('countAbout',['bigSum'])
+			...mapState(['sum','school','subject','personList']),
+			...mapGetters(['bigSum'])
 		}
 	}
 </script>
