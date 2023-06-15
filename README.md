@@ -1906,7 +1906,7 @@ methods:{
 
 2. 安装全局事件总线（在main.js中）：
 
-   ```
+   ```javascript
    new Vue({
    	......
    	beforeCreate() {
@@ -1920,7 +1920,7 @@ methods:{
 
    1. 接收数据：A组件想接收数据，则在A组件中给$bus绑定自定义事件，事件的回调留在A组件自身。
 
-      ```
+      ```javascript
       methods(){
         demo(data){......}
       }
@@ -1991,7 +1991,7 @@ methods:{
 
    2. 使用`<transition>`包裹要过度的元素，并配置name属性：
 
-      ```
+      ```javascript
       <transition name="hello">
       	<h1 v-show="isShow">你好啊！</h1>
       </transition>
@@ -2036,11 +2036,11 @@ Axios通过创建XMLHttpRequest对象发送HTTP请求，并返回一个Promise�
 
 #### 在npm中下载axios
 
-```
+```javascript
 npm i axios
 ```
 
-```
+```javascript
 // 引入JavaScript方法
 import axios from 'axios'
 ```
@@ -2049,7 +2049,7 @@ import axios from 'axios'
 
  在vue.config.js中添加如下配置：
 
-```
+```javascript
 devServer:{
   proxy:"http://localhost:5000"
 }
@@ -2069,7 +2069,7 @@ devServer:{
 
  编写vue.config.js配置具体代理规则：
 
-```
+```javascript
 module.exports = {
 	devServer: {
       proxy: {
@@ -2104,7 +2104,7 @@ module.exports = {
 
 下面是使用`defineConfig`方法来创建配置对象
 
-```
+```javascript
 const { defineConfig } = require('@vue/cli-service');
 
 module.exports = defineConfig(config => {
@@ -2145,7 +2145,7 @@ module.exports = defineConfig(config => {
 
    1. 默认插槽：
 
-      ```
+      ```javascript
       父组件中：
               <Category>
                  <div>html结构1</div>
@@ -2163,7 +2163,7 @@ module.exports = defineConfig(config => {
 
    2. 具名插槽：
 
-      ```
+      ```javascript
       父组件中：
               <Category>
                   <template slot="center">
@@ -2192,7 +2192,7 @@ module.exports = defineConfig(config => {
 
       2. 具体编码：
 
-         ```
+         ```javascript
          父组件中：
          		<Category>
          			<template scope="scopeData">
@@ -2254,7 +2254,7 @@ module.exports = defineConfig(config => {
 
 1. 创建文件：`src/store/index.js`
 
-   ```
+   ```javascript
    //引入Vue核心库
    import Vue from 'vue'
    //引入Vuex
@@ -2281,7 +2281,7 @@ module.exports = defineConfig(config => {
 
 2. 在`main.js`中创建vm时传入`store`配置项
 
-   ```
+   ```javascript
    ......
    //引入store
    import store from './store'
@@ -2301,7 +2301,7 @@ module.exports = defineConfig(config => {
 
 1. 初始化数据、配置`actions`、配置`mutations`，操作文件`store.js`
 
-   ```
+   ```javascript
    //引入Vue核心库
    import Vue from 'vue'
    //引入Vuex
@@ -2352,7 +2352,7 @@ module.exports = defineConfig(config => {
 
 2. 在`store.js`中追加`getters`配置
 
-   ```
+   ```javascript
    ......
    
    const getters = {
@@ -2378,7 +2378,7 @@ module.exports = defineConfig(config => {
 
 1. **mapState方法：**用于帮助我们映射`state`中的数据为计算属性
 
-   ```
+   ```javascript
    computed: {
        //借助mapState生成计算属性：sum、school、subject（对象写法）
         ...mapState({sum:'sum',school:'school',subject:'subject'}),
@@ -2392,7 +2392,7 @@ module.exports = defineConfig(config => {
 
 2. **mapGetters方法：**用于帮助我们映射`getters`中的数据为计算属性
 
-   ```
+   ```javascript
    computed: {
        //借助mapGetters生成计算属性：bigSum（对象写法）
        ...mapGetters({bigSum:'bigSum'}),
@@ -2406,7 +2406,7 @@ module.exports = defineConfig(config => {
 
 3. **mapActions方法：**用于帮助我们生成与`actions`对话的方法，即：包含`$store.dispatch(xxx)`的函数
 
-   ```
+   ```javascript
    methods:{
        //靠mapActions生成：incrementOdd、incrementWait（对象形式）
        ...mapActions({incrementOdd:'jiaOdd',incrementWait:'jiaWait'})
@@ -2420,7 +2420,7 @@ module.exports = defineConfig(config => {
 
 4. **mapMutations方法：**用于帮助我们生成与`mutations`对话的方法，即：包含`$store.commit(xxx)`的函数
 
-   ```
+   ```javascript
    methods:{
        //靠mapActions生成：increment、decrement（对象形式）
        ...mapMutations({increment:'JIA',decrement:'JIAN'}),
@@ -2440,7 +2440,7 @@ module.exports = defineConfig(config => {
 
 2. 修改`store.js`
 
-   ```
+   ```javascript
    const countAbout = {
      namespaced:true,//开启命名空间
      state:{x:1},
@@ -2473,7 +2473,7 @@ module.exports = defineConfig(config => {
 
 3. 开启命名空间后，组件中读取state数据：
 
-   ```
+   ```javascript
    //方式一：自己直接读取
    this.$store.state.personAbout.list
    //方式二：借助mapState读取：
@@ -2495,7 +2495,7 @@ module.exports = defineConfig(config => {
 
 5. 开启命名空间后，组件中调用dispatch
 
-   ```
+   ```javascript
    //方式一：自己直接dispatch
    this.$store.dispatch('personAbout/addPersonWang',person)
    //方式二：借助mapActions：
@@ -2506,9 +2506,10 @@ module.exports = defineConfig(config => {
 
 6. 开启命名空间后，组件中调用commit
 
-   ```
+   ```javascript
    //方式一：自己直接commit
    this.$store.commit('personAbout/ADD_PERSON',person)
    //方式二：借助mapMutations：
    ...mapMutations('countAbout',{increment:'JIA',decrement:'JIAN'}),
    ```
+
