@@ -10,8 +10,7 @@
         <!-- 跳转路由并携带query参数 对象写法-->
         <router-link
           :to="{
-            // path: '/home/message/detail',
-            name: 'xiangqing', // 通过命名路由跳转
+            path: '/home/message/detail',
             query: { id: msg.id, title: msg.title },
           }"
           >{{ msg.title }}</router-link
