@@ -2513,3 +2513,724 @@ module.exports = defineConfig(config => {
    ...mapMutations('countAbout',{increment:'JIA',decrement:'JIAN'}),
    ```
 
+## 路由
+
+1. 理解： 一个路由（route）就是一组映射关系（key - value），多个路由需要路由器（router）进行管理。
+2. 前端路由：key是路径，value是组件。
+3. 后端路由：value是function，用于处理**请求路径**找到匹配的**函数**来处理(@RequestMapping)
+
+### 1.基本使用
+
+1. 安装vue-router，命令：`npm i vue-router`
+
+2. 应用插件：`Vue.use(VueRouter)`
+
+3. 编写router配置项:
+
+   ```
+   //引入VueRouter
+   import VueRouter from 'vue-router'
+   //引入Luyou 组件
+   import About from '../components/About'
+   import Home from '../components/Home'
+   
+   //创建router实例对象，去管理一组一组的路由规则
+   const router = new VueRouter({
+   	routes:[
+   		{
+   			path:'/about',
+   			component:About
+   		},
+   		{
+   			path:'/home',
+   			component:Home
+   		}
+   	]
+   })
+   
+   //暴露router
+   export default router
+   ```
+
+   
+
+4. 实现切换（active-class可配置高亮样式）
+
+   ```
+   <router-link active-class="active" to="/about">About</router-link>
+   ```
+
+   
+
+5. 指定展示位置
+
+   ```
+   <router-view></router-view>
+   ```
+
+   
+
+### 2.几个注意点
+
+1. 路由组件通常存放在`pages`文件夹，一般组件通常存放在`components`文件夹。
+2. 通过切换，“隐藏”了的路由组件，默认是被销毁掉的，需要的时候再去挂载。
+3. 每个组件都有自己的`$route`属性，里面存储着自己的路由信息。
+4. 整个应用只有一个router，可以通过组件的`$router`属性获取到。
+5. 在配置routers时，引入的compoment大小写编译器可能不报错，但是vue编译会报错。
+
+### 3.多级路由（多级路由）
+
+1. 配置路由规则，使用children配置项：
+
+   ```
+   routes:[
+   	{
+   		path:'/about',
+   		component:About,
+   	},
+   	{
+   		path:'/home',
+   		component:Home,
+   		children:[ //通过children配置子级路由
+   			{
+   				path:'news', //此处一定不要写：/news
+   				component:News
+   			},
+   			{
+   				path:'message',//此处一定不要写：/message
+   				component:Message
+   			}
+   		]
+   	}
+   ]
+   ```
+
+   
+
+2. 跳转（要写完整路径）：
+
+   ```
+   <router-link to="/home/news">News</router-link>
+   ```
+
+   
+
+### 4.路由的query参数
+
+1. 传递参数
+
+   ```
+   <!-- 跳转并携带query参数，to的字符串写法 -->
+   <router-link :to="/home/message/detail?id=666&title=你好">跳转</router-link>
+   				
+   <!-- 跳转并携带query参数，to的对象写法 -->
+   <router-link 
+   	:to="{
+   		path:'/home/message/detail',
+   		query:{
+   		   id:666,
+               title:'你好'
+   		}
+   	}"
+   >跳转</router-link>
+   ```
+
+   
+
+2. 接收参数：
+
+   ```
+   $route.query.id
+   $route.query.title
+   ```
+
+   
+
+### 5.命名路由
+
+1. 作用：可以简化路由的跳转。
+
+2. 如何使用
+
+   1. 给路由命名：
+
+      ```
+      {
+      	path:'/demo',
+      	component:Demo,
+      	children:[
+      		{
+      			path:'test',
+      			component:Test,
+      			children:[
+      				{
+                            name:'hello' //给路由命名
+      					path:'welcome',
+      					component:Hello,
+      				}
+      			]
+      		}
+      	]
+      }
+      ```
+
+      
+
+   2. 简化跳转：
+
+      ```
+      <!--简化前，需要写完整的路径 -->
+      <router-link to="/demo/test/welcome">跳转</router-link>
+      
+      <!--简化后，直接通过名字跳转 -->
+      <router-link :to="{name:'hello'}">跳转</router-link>
+      
+      <!--简化写法配合传递参数 -->
+      <router-link 
+      	:to="{
+      		name:'hello',
+      		query:{
+      		   id:666,
+                  title:'你好'
+      		}
+      	}"
+      >跳转</router-link>
+      ```
+
+      
+
+### 6.路由的params参数
+
+1. 配置路由，声明接收params参数
+
+   ```
+   {
+   	path:'/home',
+   	component:Home,
+   	children:[
+   		{
+   			path:'news',
+   			component:News
+   		},
+   		{
+   			component:Message,
+   			children:[
+   				{
+   					name:'xiangqing',
+   					path:'detail/:id/:title', //使用占位符声明接收params参数
+   					component:Detail
+   				}
+   			]
+   		}
+   	]
+   }
+   ```
+
+   
+
+2. 传递参数
+
+   ```
+   <!-- 跳转并携带params参数，to的字符串写法 -->
+   <router-link :to="/home/message/detail/666/你好">跳转</router-link>
+   				
+   <!-- 跳转并携带params参数，to的对象写法 -->
+   <router-link 
+   	:to="{
+   		name:'xiangqing',
+   		params:{
+   		   id:666,
+               title:'你好'
+   		}
+   	}"
+   >跳转</router-link>
+   ```
+
+   
+
+   > 特别注意：路由携带params参数时，若使用to的对象写法，则不能使用path配置项，必须使用name配置！
+
+3. 接收参数：
+
+   ```
+   $route.params.id
+   $route.params.title
+   ```
+
+   
+
+### 7.路由的props配置
+
+ 作用：让路由组件更方便的收到参数
+
+```
+{
+	name:'xiangqing',
+	path:'detail/:id',
+	component:Detail,
+
+	//第一种写法：props值为对象，该对象中所有的key-value的组合最终都会通过props传给Detail组件
+	// props:{a:900}
+
+	//第二种写法：props值为布尔值，布尔值为true，则把路由收到的所有params参数通过props传给Detail组件
+	// props:true
+	
+	//第三种写法：props值为函数，该函数返回的对象中每一组key-value都会通过props传给Detail组件
+	props(route){
+		return {
+			id:route.query.id,
+			title:route.query.title
+		}
+	}
+}
+```
+
+
+
+### 8.`<router-link>`的replace属性
+
+1. 作用：控制路由跳转时操作浏览器历史记录的模式
+2. 浏览器的历史记录有两种写入方式：分别为`push`和`replace`，`push`是追加历史记录，`replace`是替换当前记录。路由跳转时候默认为`push`
+3. 如何开启`replace`模式：`<router-link replace .......>News</router-link>`
+
+### 9.编程式路由导航
+
+1. 作用：不借助`<router-link> `实现路由跳转，让路由跳转更加灵活
+
+2. 具体编码：
+
+   ```
+   //$router的两个API
+   this.$router.push({
+   	name:'xiangqing',
+   		params:{
+   			id:xxx,
+   			title:xxx
+   		}
+   })
+   
+   this.$router.replace({
+   	name:'xiangqing',
+   		params:{
+   			id:xxx,
+   			title:xxx
+   		}
+   })
+   this.$router.forward() //前进
+   this.$router.back() //后退
+   this.$router.go() //可前进也可后退（传递数字，根据正负前进和后退）
+   ```
+
+   
+
+### 10.缓存路由组件
+
+1. 作用：让不展示的路由组件保持挂载，不被销毁。
+
+2. 具体编码：
+
+   ```
+   <keep-alive include="News"> 
+       <router-view></router-view>
+   </keep-alive>
+   ```
+
+   
+
+- `<keep-alive>`是一个抽象组件，会将其包裹的内容存储在内存中，并在需要时缓存或销毁它们。
+- `include="News"`表示只有名称为"News"的组件才应该被缓存。如果不指定`include`属性，则所有组件都将被缓存。
+- `<router-view>`用于渲染当前路由匹配到的组件。
+
+因此，这段代码的作用是：当页面切换到名称为"News"的组件时，它会被缓存起来，当用户再次浏览到该组件时，直接从缓存中读取，提高了页面的响应速度和用户体验。
+
+------
+
+如果要缓存多个组件，可以在`<keep-alive>`的`include`属性中指定一个数组来包含多个组件的名称。例如：
+
+```
+<keep-alive :include="['News', 'Article', 'Comment']">
+  <router-view></router-view>
+</keep-alive>
+```
+
+
+
+在这个例子中，会将名为"News"、"Article"和"Comment"的三个组件都缓存起来。如果需要缓存更多的组件，只需要将它们的名称放入数组即可。
+
+注意：当使用数组形式进行多个组件的缓存时，Vue.js会根据它们在数组中的顺序依次匹配，如果找到匹配的组件，则会缓存它并停止继续匹配，因此，组件的顺序是有影响的，需要根据实际需求进行调整。
+
+### 11.两个新的生命周期钩子
+
+1. 作用：`activated`和`deactivated`是Vue.js中的两个生命周期钩子函数，它们在`<keep-alive>`组件中使用，用于控制被缓存的组件的激活和停用。
+2. 功能分别是：
+   1. `activated`: 被缓存的组件激活时调用，可以在这里执行一些需要在组件被重新渲染前进行的操作，比如获取最新数据、更新状态等。（激活钩子）
+   2. `deactivated`: 被缓存的组件停用时调用，可以在这里执行一些需要在组件被缓存前进行的操作，比如保存当前状态、清空数据等。（失活钩子）
+
+> 具体来说，当一个被缓存的组件被切换到时，会触发`activated`钩子函数；当一个被缓存的组件离开时，会触发`deactivated`钩子函数。
+
+------
+
+使用场景：`<keep-alive>`组件通常用于缓存页面中经常切换的组件，以提高页面的响应速度和用户体验。但是有些情况下，缓存的组件可能需要在每次被重新渲染前或者被缓存前执行一些特定的操作，例如：
+
+- 在页面切换到某个组件时，需要从服务器获取最新的数据。
+- 当一个组件被缓存时，需要保存当前选中的状态，以便下次缓存时可以恢复。
+- 当一个组件被停用时，需要将一些数据清空或重置。
+
+在这些情况下，就可以使用`activated`和`deactivated`钩子函数来实现这些操作。
+
+### 12.路由守卫
+
+作用：路由守卫的作用是对即将发生的路由变化或已经发生的路由变化进行控制和管理。Vue Router 提供了全局守卫、独享守卫和组件内守卫三种类型的路由守卫。
+
+通过使用路由守卫，我们可以实现以下功能：
+
+- 权限验证：在用户访问某些页面时，需要判断用户是否有访问权限。如果用户没有权限访问该页面，可以通过路由守卫拦截路由跳转，并弹出提示信息。
+- 记录浏览历史：在用户浏览网站时，需要记录用户的浏览历史。通过路由守卫，在每次路由变化时记录浏览历史。
+- 异步组件处理：在使用异步组件时，需要在组件加载完成之前显示一些占位信息。通过路由守卫，在异步组件加载完成之前显示占位信息。
+- 路由重定向：在用户访问某个路径时，需要将用户重定向到其他路径。通过路由守卫，可以在路由跳转之前进行重定向操作。
+
+| 守卫类型   | 使用方法                                                     | 使用场景                                                     |
+| ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 全局守卫   | 通过 `router.beforeEach()` 方法注册回调函数、`router.afterEach()` 方法注册后置守卫、`router.beforeResolve()` 方法解析异步路由组件 | 可以用于验证用户是否已经登录、记录用户浏览记录等全局操作     |
+| 独享守卫   | 在具体的路由配置中使用 `beforeEnter` 方法注册回调函数        | 仅对该路由生效，可以用于验证当前用户的权限是否能够访问该路由 |
+| 组件内守卫 | 在组件内部使用 `beforeRouteEnter`、`beforeRouteUpdate` 和 `beforeRouteLeave` 方法注册回调函数 | 可以用于在组件内部做一些路由相关的处理操作                   |
+
+Vue Router 提供了全局守卫、独享守卫和组件内守卫三种路由守卫。
+
+- 全局守卫: 适用于全局性的路由验证和处理操作。可通过 `router.beforeEach()` 方法注册前置守卫回调函数，在路由跳转之前进行验证或者全局处理操作；可通过 `router.afterEach()` 方法注册后置守卫回调函数，在路由跳转之后进行操作；可通过 `router.beforeResolve()` 方法解析异步路由组件。
+- 独享守卫: 适用于对某个具体路由做权限验证和特殊处理等操作。可在具体的路由配置中使用 `beforeEnter` 方法注册回调函数。
+- 组件内守卫: 适用于在组件内部做一些路由相关的处理操作。可在组件内部使用 `beforeRouteEnter`、`beforeRouteUpdate` 和 `beforeRouteLeave` 方法注册回调函数，分别对应组件被创建之前、组件复用时和组件离开时执行的回调函数。
+
+需要注意的是，在全局守卫和独享守卫中，需要调用 `next()` 方法，否则路由会一直停留在当前页面；在组件内守卫中，可以通过回调函数中的 `next()` 方法来控制路由跳转，并且在 `beforeRouteLeave` 钩子函数中无法阻止路由跳转。
+
+下面是各个守卫的使用示例：
+
+1. 全局守卫
+
+```
+router.beforeEach((to, from, next) => {
+  // 在这里进行路由验证或者全局处理操作
+  next(); // 调用 next() 方法，继续路由跳转
+});
+
+router.afterEach((to, from) => {
+  // 在这里进行路由跳转之后的操作
+});
+
+router.beforeResolve((to, from, next) => {
+  // 在这里进行异步路由组件的解析
+  next(); // 调用 next() 方法，继续路由跳转
+});
+```
+
+
+
+1. 独享守卫
+
+```
+{
+  path: '/user/:id',
+  component: User,
+  beforeEnter: (to, from, next) => {
+    // 在这里进行路由验证或者特殊处理操作
+    next(); // 调用 next() 方法，继续路由跳转
+  }
+}
+```
+
+
+
+1. 组件内守卫
+
+```
+export default {
+  beforeRouteEnter(to, from, next) {
+    // 在组件还没有被渲染出来时执行，无法访问 this 实例
+    next();
+  },
+  beforeRouteUpdate(to, from, next) {
+    // 在组件复用时执行，可以访问 this 实例
+    next();
+  },
+  beforeRouteLeave(to, from, next) {
+    // 在组件离开时执行，可以访问 this 实例，但是无法阻止路由跳转
+    next();
+  }
+}
+```
+
+
+
+除了上述守卫之外，还有两种全局守卫。
+
+- `beforeResolve`: 在导航被确认之前，同时在所有组件内守卫和异步路由组件被解析之后调用。这可以用来确保在渲染组件之前，所有的异步组件都已经加载完毕。
+- `onError`: 当导航过程中出现未捕获的错误时调用。需要注意的是，如果在一个路由守卫中抛出了一个错误，此错误将会被传递到最后一个激活的全局错误处理程序。
+
+#### 数据存储位置
+
+- 存储在 Vuex 中：适用于需要共享变量的情况，可以让不同组件之间共享变量，并且可以在全局守卫、独享守卫和组件内守卫中进行访问。由于需要安装和配置 Vuex，因此相对麻烦一些。
+
+```
+// 首先，在 Vuex 中定义一个状态
+const state = {
+  isAuthenticated: false // 是否已经登录
+}
+...
+// 在需要进行变量判断的地方，通过 mutations 修改状态
+this.$store.commit('setAuthenticated', true);
+...
+// 在路由守卫中访问状态
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth && !store.state.isAuthenticated) {
+    next('/login');
+  } else {
+    next();
+  }
+});
+```
+
+
+
+- 存储在当前组件数据中：适用于只需要在当前组件进行变量判断的情况，可以在组件内部直接进行访问和修改，但是无法在其他组件和路由中共享变量。
+
+```
+// 在组件的 data 选项中定义一个变量
+data() {
+  return {
+    isAuthenticated: false // 是否已经登录
+  }
+},
+...
+// 在需要进行变量判断的地方，修改变量的值
+this.isAuthenticated = true;
+...
+// 在组件内守卫中访问变量
+beforeRouteEnter(to, from, next) {
+  if (!this.isAuthenticated) {
+    next('/login');
+  } else {
+    next();
+  }
+}
+```
+
+
+
+- 存储在路由中：适用于只需要在当前路由进行变量判断的情况，可以在独享守卫和组件内守卫中进行访问。但是会导致路由配置变得臃肿，不易于维护。
+
+```
+// 在路由配置中定义一个变量
+const routes = [
+  {
+    path: '/home',
+    component: Home,
+    meta: {
+      requiresAuth: true // 是否需要登录权限
+    }
+  },
+  // ...
+]
+...
+// 在需要进行变量判断的地方，通过 meta 属性修改变量的值
+this.$router.push({
+  path: '/home',
+  meta: {
+    requiresAuth: true,
+    isAuthenticated: true
+  }
+})
+// 在独享守卫和组件内守卫中访问变量
+beforeEnter(to, from, next) {
+  if (!to.meta.isAuthenticated) {
+    next('/login');
+  } else {
+    next();
+  }
+}
+
+beforeRouteEnter(to, from, next) {
+  if (!to.meta.isAuthenticated) {
+    next('/login');
+  } else {
+    next(vm => {
+      vm.isAuthenticated = to.meta.isAuthenticated;
+    });
+  }
+}
+```
+
+
+
+需要注意的是，在进行路由跳转之前，需要根据变量的值决定是否进行路由跳转，并且在组件内守卫中访问变量时，需要使用 `next` 方法的回调函数来更新组件的数据。另外，将变量存储在路由中会导致路由配置变得臃肿，不易于维护，因此建议在需要共享变量的情况下使用 Vuex 状态管理中心。
+
+### 13.路由器的两种工作模式
+
+Vue Router 有两种工作模式：`hash` 模式和 `history` 模式。
+
+#### 1.`hash` 模式
+
+在 `hash` 模式中，URL 中的路径部分以 `#` 开头，并且后面紧跟着一个由路由器管理的字符串，hash值不会包含在 HTTP 请求中。例如，下面的 URL 表示访问 `/home` 路径：
+
+```
+http://localhost:8080/#/home
+```
+
+
+
+通过 `hash` 模式可以实现单页应用程序（SPA）的核心功能：在网页内部跳转而不需要刷新整个页面。当用户点击链接或者触发事件时，Vue Router 会解析 URL 中的 `hash` 部分，然后根据匹配的路由规则进行组件的渲染和显示。
+
+#### 2.`history` 模式
+
+在 `history` 模式中，URL 中的路径部分不再使用 `#` 符号，而是直接使用正常的路径。例如，下面的 URL 表示访问 `/home` 路径：
+
+```
+http://localhost:8080/home
+```
+
+
+
+通过 `history` 模式可以实现更加友好的 URL，同时也可以在浏览器历史记录中记录用户浏览的页面，从而使用户可以使用“前进”、“后退”按钮进行导航。
+
+要使用 `history` 模式，需要在创建 Vue Router 实例时配置 `mode: 'history'`，如下所示：
+
+```
+const router = new VueRouter({
+  mode: 'history',
+  routes: [
+    ...
+  ]
+})
+```
+
+
+
+需要注意的是，在使用 `history` 模式时，需要后端服务器进行配置，以保证在刷新页面时能够正确地返回对应的页面。否则，可能会出现 404 错误或者其他问题。
+
+#### 两种模式比较
+
+1. 对于一个url来说，什么是hash值？—— #及其后面的内容就是hash值。
+2. hash值不会包含在 HTTP 请求中，即：hash值不会带给服务器。
+3. hash模式：
+   1. 地址中永远带着#号，不美观 。
+   2. 若以后将地址通过第三方手机app分享，若app校验严格，则地址会被标记为不合法。
+   3. 兼容性较好。
+4. history模式：
+   1. 地址干净，美观 。
+   2. 兼容性和hash模式相比略差。
+   3. 应用部署上线时需要后端人员支持，解决刷新页面服务端404的问题。
+
+## 14 vue的打包命令
+
+使用 `npm` 工具的 `vue` 命令可以方便地创建和管理 Vue 项目。
+
+### 创建项目
+
+要创建一个新的 Vue 项目，可以使用以下命令：
+
+```
+# 全局安装 vue-cli
+npm install -g @vue/cli
+
+# 创建新项目
+vue create my-project
+```
+
+
+
+在上面的命令中，首先需要全局安装 `vue-cli` 工具。然后，在命令行中输入 `vue create my-project`，其中 `my-project` 是项目名称，会自动创建一个新的 Vue 项目，并且会提示选择一些配置项，比如 Babel、ESLint、CSS 预处理器等。
+
+### 运行项目
+
+创建完 Vue 项目后，可以使用以下命令来运行项目：
+
+```
+# 进入项目目录
+cd my-project
+
+# 启动开发服务器
+npm run serve
+```
+
+
+
+在上面的命令中，`npm run serve` 用于启动开发服务器，并在浏览器中自动打开网页进行预览。每次修改代码后，开发服务器都会自动重新编译并刷新浏览器，以方便开发调试。
+
+### 打包项目
+
+在完成项目开发后，可以使用以下命令将项目打包成静态资源文件：
+
+```
+# 打包项目
+npm run build
+```
+
+
+
+在上面的命令中，`npm run build` 用于将项目打包成静态资源文件，并保存到 `dist` 目录中。可以将该目录下的文件上传到服务器进行部署，从而让用户访问你的应用程序。
+
+需要注意的是，在打包项目之前，可以通过修改 `vue.config.js` 文件来进行一些配置，比如自定义构建目录、设置代理、添加插件等。
+
+## 15 项目上传到服务器
+
+在使用 Vue CLI 打包项目后，可以将生成的静态资源文件部署到后端服务器上。下面以 Nginx 为例，介绍如何部署 Vue 项目：
+
+1. 将打包生成的 `dist` 目录中的所有文件上传到服务器上。
+
+2. 安装 Nginx，并创建一个新的 Nginx 配置文件 `/etc/nginx/sites-available/my-project`，其中 `my-project` 是你的项目名称。可以使用以下命令创建该文件：
+
+   ```
+   sudo nano /etc/nginx/sites-available/my-project
+   ```
+
+   
+
+3. 在该配置文件中添加以下内容：
+
+   ```
+   server {
+       listen 80;
+       server_name my-project.com; # 修改为你的域名或者 IP 地址
+   
+       root /var/www/my-project; # 修改为你的项目目录
+       index index.html;
+   
+       location / {
+           try_files $uri $uri/ /index.html;
+       }
+   }
+   ```
+
+   
+
+   在上面的配置中，`server_name` 表示你的项目对应的域名或者 IP 地址。`root` 表示你的项目所在的目录，如果需要使用别名或者子目录，可以修改为相应的路径。`location` 表示请求的 URL 对应的本地文件路径。由于 Vue Router 是基于 HTML5 History API 实现的，因此需要将所有请求都指向 `index.html` 文件，从而保证能够正确地渲染页面。
+
+4. 创建符号链接 `/etc/nginx/sites-enabled/my-project`，并重启 Nginx：
+
+   ```
+   sudo ln -s /etc/nginx/sites-available/my-project /etc/nginx/sites-enabled/
+   sudo systemctl restart nginx
+   ```
+
+   
+
+   在上面的命令中，`ln -s` 表示创建符号链接，将 `sites-available` 目录下的配置文件链接到 `sites-enabled` 目录中。`systemctl restart nginx` 用于重启 Nginx 服务器，以使新的配置生效。
+
+5. 最后，在浏览器中输入你的域名或者 IP 地址访问应用程序即可。如果一切正常，应该能够看到 Vue 应用程序的页面。
+
+需要注意的是，在部署 Vue 项目时，需要确保后端服务器正确配置了跨域请求，并且在进行 API 请求时需要将请求路径设置为相对路径，比如 `/api/user`。同时，要确保静态资源可以被访问到，并且需要进行安全性、性能等方面的优化和调整。
+
+## 16 Vue UI 组件库
+
+### 1.移动端常用 UI 组件库
+
+Vant https://youzan.github.io/vant
+
+Cube UI https://didi.github.io/cube-ui
+
+Mint UI [http://mint-ui.github.io](http://mint-ui.github.io/)
+
+### 2. PC 端常用 UI 组件库
+
+Element UI [https://element.eleme.cn](https://element.eleme.cn/)
+
+IView UI [https://www.iviewui.com](https://www.iviewui.com/)
