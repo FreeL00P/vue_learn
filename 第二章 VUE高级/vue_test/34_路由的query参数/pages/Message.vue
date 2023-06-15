@@ -13,8 +13,7 @@
             // path: '/home/message/detail',
             //使用params参数时，必须指定name属性 不能使用path属性
             name: 'xiangqing', // 通过命名路由跳转
-            // params: { id: msg.id, title: msg.title },
-            query: { id: msg.id, title: msg.title },
+            params: { id: msg.id, title: msg.title },
           }"
           >{{ msg.title }}</router-link
         >&nbsp;&nbsp;
