@@ -8,12 +8,13 @@ import News from "../pages/News";
 import Detail from "../pages/Detail";
 
 //创建并暴露一个路由器
-export default new VueRouter({
+const router = new VueRouter({
   routes: [
     {
       name: "guanyu",
       path: "/about",
       component: About,
+      meta: { isAuth: false },
     },
     {
       path: "/home",
@@ -47,6 +48,50 @@ export default new VueRouter({
           ],
         },
       ],
+      meta: { isAuth: true },
     },
   ],
 });
+//全局前置路由守卫
+//参数1：to，即将要进入的目标路由对象
+//参数2：from，当前导航正要离开的路由对象
+//参数3：next，调用该方法后，才能进入下一个钩子
+// router.beforeEach((to, from, next) => {
+//   console.log("beforeEach", to, from);
+//   //什么时候放行
+//   // if (localStorage.getItem("school") === "湖南工程学院") {
+//   //   next();
+//   // }
+//   if (to.meta.isAuth) {
+//     if (localStorage.getItem("school") === "湖南工程学院") {
+//       next();
+//     } else {
+//       alert("学校名不对，无权限查看");
+//     }
+//   } else {
+//     next();
+//   }
+// });
+
+// //全局后置路由守卫 -- 初始化的时候被调用，每次路由切换之后被调用
+// router.afterEach((to, from) => {
+//   console.log("afterEach", to, from);
+// });
+//独享路由守卫
+// beforeEnter: (to, from, next) => {
+//   console.log("beforeEach", to, from);
+//   //什么时候放行
+//   // if (localStorage.getItem("school") === "湖南工程学院") {
+//   //   next();
+//   // }
+//   if (to.meta.isAuth) {
+//     if (localStorage.getItem("school") === "湖南工程学院") {
+//       next();
+//     } else {
+//       alert("学校名不对，无权限查看");
+//     }
+//   } else {
+//     next();
+//   }
+// };
+export default router;
